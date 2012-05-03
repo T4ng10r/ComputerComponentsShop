@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project ComputerComponentsShop -->
-<!-- Saved: 2012-04-30, 14:09:57 -->
+<!-- Saved: 2012-05-03, 14:39:55 -->
 <!-- Copyright (C) 2012 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -14,11 +14,17 @@
   <Sources>
     <Source>__init__.py</Source>
     <Source>main.py</Source>
-    <Source>QFrozenColumnTableView.py</Source>
-    <Source>ComponentHeaderView.py</Source>
-    <Source>ComponentHeaderItem.py</Source>
-    <Source>ModelEnumerations.py</Source>
-    <Source>ComputerComponentsConfiguration.py</Source>
+    <Source>ComputerConfigurationParser.py</Source>
+    <Source>GUI/__init__.py</Source>
+    <Source>GUI/QFrozenColumnTableView.py</Source>
+    <Source>GUI/ComponentHeaderItem.py</Source>
+    <Source>GUI/ComponentHeaderView.py</Source>
+    <Source>GUI/ModelEnumerations.py</Source>
+    <Source>Data/__init__.py</Source>
+    <Source>Data/ComputerConfigurationModel.py</Source>
+    <Source>UnitTest/__init__.py</Source>
+    <Source>UnitTest/ComputerConfigurationModelTest.py</Source>
+    <Source>Data/ShopPluginInterface.py</Source>
   </Sources>
   <Forms>
   </Forms>

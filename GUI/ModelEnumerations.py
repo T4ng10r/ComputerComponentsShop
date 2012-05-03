@@ -1,4 +1,4 @@
-from PyQt4.QtCore.Qt import *
+from PyQt4.QtCore import Qt
 
 #class ModelUserRoles:
 #    RowInd_Remove=,
@@ -21,3 +21,21 @@ class ComputerConfModelRoles:
 	Role_CompShopPrice = Qt.UserRole+10
 	Role_CompShopURL = Qt.UserRole+11
 	Role_ShopColumnActive = Qt.UserRole+12
+
+class ShopData:
+    bActive=0
+    sName=''
+    
+class ComponentPrice:
+    iLastPrice=0
+    sUrl=''
+class ComponentData:
+    bActive=0
+    sName=''
+    listPrices =[]
+    def __init__(self):
+        self.bActive = 0
+        self.sName = ''
+        self.listPrices = []
+
+    
