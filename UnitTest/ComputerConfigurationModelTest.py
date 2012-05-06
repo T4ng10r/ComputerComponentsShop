@@ -8,17 +8,26 @@ except ImportError:
 	sys.path.append(os.path.join(os.path.dirname(__file__),".."))
 	sys.path.append(os.path.dirname(__file__))
 from Data.ComputerConfigurationModel import ComputerConfModel
+from Data.ShopPluginsStubs import *
 
 class ComputerConfigurationModelTest(unittest.TestCase):
     """Class for UnitTest of Model"""
     def setUp(self):
         self.Model = ComputerConfModel()
+
     def tearDown(self):
-        pass
+        del self.Model
+
     def test_01_emptyModelRowColsCount(self):
         self.assertEqual(self.Model.rowCount(), 1)
         self.assertEqual(self.Model.columnCount(), 1)
-        pass
+    
+    def test_02_ModelRowColsCount(self):
+        pKomputronikShopPluginStub = KomputronikShopPluginStub
+        pProlineShopPluginStub = ProlineShopPluginStub
+        self.Model.addShopPlugin(pKomputronikShopPluginStub)
+        self.assertEqual(self.Model.columnCount(), 2)
+    pass
 #	#jak przetestowac czy opener zostal prawidlowo przygotowany?
 #	def test_01_openerBuild(self):
 #		prevOpener = urllib2._opener

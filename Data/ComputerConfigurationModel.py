@@ -1,6 +1,7 @@
 #pragma once
 from PyQt4.QtCore import *
 from GUI.ModelEnumerations import *
+from Data.ShopPluginInterface import *
 
 class ComponentEntry:
     """Class contains data about single row"""
@@ -32,7 +33,7 @@ class ComputerConfModel(QAbstractTableModel):
 #        self.availableShops = []
 #        self.shopsSelectedForColumns = []
     def index(self,  row, column, parent):
-        if row<0 or row>=rowCount() or column<0 or column>=columnCount():
+        if row<0 or row>=self.rowCount() or column<0 or column>=self.columnCount():
             return QModelIndex();
         return self.createIndex(row, column);
     def parent(self,  child):
@@ -41,19 +42,16 @@ class ComputerConfModel(QAbstractTableModel):
         return  len(self.lShopsEntries)+1 # minimum
     def columnCount(self, parent = QModelIndex()):
         return len(self.lComponentsEntries)+1 
-    def addShop(self,  ptrPlugin):
-        
+    def addShopPlugin(self,  ptrPlugin):
+        if ptrPlugin == None: 
+            return
+        strShopName = ptrPlugin.shopName
+        self.lShopsEntries[strShopName]=ptrPlugin
+        #m_ptrPriv->processHeaders();
+        stTopLeft = self.index(0,0, None);
+        stBottomRight = self.index(self.rowCount()-1,self.columnCount()-1, None);
+        self.emit(dataChanged(stTopLeft,stBottomRight))
         pass
-void CComputerConfModel::addShopPlugin(ShopInterface * ptrPlugin)
-{
-	if (!ptrPlugin)	return;
-	QString strShopName = ptrPlugin->shopName();
-	m_ptrPriv->mPlugins.insert(std::make_pair(strShopName,ptrPlugin));
-	m_ptrPriv->processHeaders();
-	QModelIndex stTopLeft = index(0,0);
-	QModelIndex stBottomRight = index(rowCount()-1,columnCount()-1);
-	emit dataChanged(stTopLeft,stBottomRight);
-}        
 #    def data(self, index, role = Qt.DisplayRole):
 #        iRow = index.row()
 #        iColumn = index.column()
