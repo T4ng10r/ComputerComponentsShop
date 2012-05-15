@@ -23,11 +23,26 @@ class ComputerConfigurationModelTest(unittest.TestCase):
         self.assertEqual(self.Model.columnCount(), 1)
     
     def test_02_ModelRowColsCount(self):
+        self.assertEqual(self.Model.columnCount(), 1)
+        self.assertEqual(self.Model.rowCount(), 1)
         pKomputronikShopPluginStub = KomputronikShopPluginStub
-        pProlineShopPluginStub = ProlineShopPluginStub
-        self.Model.addShopPlugin(pKomputronikShopPluginStub)
+        self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
         self.assertEqual(self.Model.columnCount(), 2)
-    pass
+        self.assertEqual(self.Model.rowCount(), 1)
+        pProlineShopPluginStub = ProlineShopPluginStub
+        self.assertEqual(self.Model.addShopPlugin(pProlineShopPluginStub), 1)
+        self.assertEqual(self.Model.columnCount(), 3)
+        self.assertEqual(self.Model.rowCount(), 1)
+    
+    def test_03_ModelRowColsCount(self):
+        self.assertEqual(self.Model.columnCount(), 1)
+        self.assertEqual(self.Model.rowCount(), 1)
+        
+    def test_04_ModelDataChangeEmited(self):
+        #pKomputronikShopPluginStub = KomputronikShopPluginStub
+        #self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
+        
+        pass
 #	#jak przetestowac czy opener zostal prawidlowo przygotowany?
 #	def test_01_openerBuild(self):
 #		prevOpener = urllib2._opener

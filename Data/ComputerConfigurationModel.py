@@ -32,6 +32,10 @@ class ComputerConfModel(QAbstractTableModel):
 #        self.itemsTable= [item] * 3 #lista elementow 
 #        self.availableShops = []
 #        self.shopsSelectedForColumns = []
+    def __del__(self):
+        self.lShopsEntries.clear()
+        self.lComponentsEntries.clear()
+        
     def index(self,  row, column, parent):
         if row<0 or row>=self.rowCount() or column<0 or column>=self.columnCount():
             return QModelIndex();
@@ -39,19 +43,19 @@ class ComputerConfModel(QAbstractTableModel):
     def parent(self,  child):
         return QModelIndex();
     def rowCount(self, parent = QModelIndex()):
-        return  len(self.lShopsEntries)+1 # minimum
+        return  len(self.lComponentsEntries)+1 # minimum
     def columnCount(self, parent = QModelIndex()):
-        return len(self.lComponentsEntries)+1 
+        return len(self.lShopsEntries)+1 
     def addShopPlugin(self,  ptrPlugin):
         if ptrPlugin == None: 
-            return
+            return 0
         strShopName = ptrPlugin.shopName
         self.lShopsEntries[strShopName]=ptrPlugin
         #m_ptrPriv->processHeaders();
         stTopLeft = self.index(0,0, None);
         stBottomRight = self.index(self.rowCount()-1,self.columnCount()-1, None);
-        self.emit(dataChanged(stTopLeft,stBottomRight))
-        pass
+        self.emit(SIGNAL("dataChanged"),stTopLeft,stBottomRight)
+        return 1
 #    def data(self, index, role = Qt.DisplayRole):
 #        iRow = index.row()
 #        iColumn = index.column()
