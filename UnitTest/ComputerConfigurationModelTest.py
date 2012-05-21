@@ -33,39 +33,111 @@ class ComputerConfigurationModelTest(unittest.TestCase):
     def test_02_AddingColumns(self):
         self.assertEqual(self.Model.columnCount(), 1)
         self.assertEqual(self.Model.rowCount(), 1)
-        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
-        self.Model.insertColumns(0, 1)
+        ########################################        
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.insertColumns(0, 1))
         self.connectionBox.assertSignalArrived("headerDataChanged()")
         self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
         self.assertEqual(self.connectionBox.args[1], 0)
         self.assertEqual(self.connectionBox.args[2], 1)
         self.assertEqual(self.Model.columnCount(), 2)
         self.assertEqual(self.Model.rowCount(), 1)
+        self.assertEqual(len(self.Model.tPricesMatrix), 1)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "1.Testing %d column for row correctness" % (iShopIndex))
         del self.connectionBox
+        ########################################
         self.connectionBox=ConnectionBox()        
-        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
-        self.Model.insertColumns(0, 1)
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.insertColumns(0, 1))
         self.connectionBox.assertSignalArrived("headerDataChanged()")
         self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
         self.assertEqual(self.connectionBox.args[1], 0)
         self.assertEqual(self.connectionBox.args[2], 2)
         self.assertEqual(self.Model.columnCount(), 3)
         self.assertEqual(self.Model.rowCount(), 1)
+        self.assertEqual(len(self.Model.tPricesMatrix), 2)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "2.Testing %d column for row correctness" % (iShopIndex))
         del self.connectionBox
+        ########################################
         self.connectionBox=ConnectionBox()        
-        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
-        self.Model.insertColumns(2, 5)
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.insertColumns(2, 5))
         self.connectionBox.assertSignalArrived("headerDataChanged()")
         self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
         self.assertEqual(self.connectionBox.args[1], 0)
         self.assertEqual(self.connectionBox.args[2], 7)
         self.assertEqual(self.Model.columnCount(), 8)
         self.assertEqual(self.Model.rowCount(), 1)
-    
+        self.assertEqual(len(self.Model.tPricesMatrix), 7)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "3.Testing %d column for row correctness" % (iShopIndex))
+
     def test_03_ModelRowColsCleaningModel(self):
         """To test cleaning model after destruction """
         self.assertEqual(self.Model.rowCount(), 1)
         self.assertEqual(self.Model.columnCount(), 1)
         
-    def test_04_ModelDataChangeEmited(self):
-        pass
+    def test_04_RemovingColumns(self):
+        self.assertEqual(self.Model.columnCount(), 1)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.assertTrue(self.Model.insertColumns(0, 8))
+        self.assertEqual(self.Model.columnCount(), 9)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.assertEqual(len(self.Model.tPricesMatrix), 8)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "1.Testing %d column for row correctness" % (iShopIndex))
+        del self.connectionBox
+        ########################################
+        self.connectionBox=ConnectionBox()        
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.removeColumns(3, 1))        
+        self.assertEqual(self.Model.columnCount(), 8)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(len(self.Model.tPricesMatrix), 7)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "2.Testing %d column for row correctness" % (iShopIndex))
+        del self.connectionBox
+        ########################################
+        self.connectionBox=ConnectionBox()        
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.removeColumns(2, 3))        
+        self.assertEqual(self.Model.columnCount(), 5)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(len(self.Model.tPricesMatrix), 4)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 0,  "2.Testing %d column for row correctness" % (iShopIndex))
+
+    def test_05_AddingRow(self):
+        self.assertEqual(self.Model.columnCount(), 1)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.Model.insertColumns(0, 2)
+        ########################################        
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.insertRows(0, 1))
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(self.connectionBox.args[0], Qt.Vertical)
+        self.assertEqual(self.connectionBox.args[1], 0)
+        self.assertEqual(self.connectionBox.args[2], 1)
+        self.assertEqual(self.Model.columnCount(), 3)
+        self.assertEqual(self.Model.rowCount(), 2)
+        self.assertEqual(len(self.Model.tPricesMatrix), 2)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 1,  "1.Testing %d column for row correctness" % (iShopIndex))
+        del self.connectionBox
+        ########################################        
+        self.connectionBox=ConnectionBox()        
+        self.assertTrue( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot))
+        self.assertTrue(self.Model.insertRows(1, 4))
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(self.connectionBox.args[0], Qt.Vertical)
+        self.assertEqual(self.connectionBox.args[1], 0)
+        self.assertEqual(self.connectionBox.args[2], 5)
+        self.assertEqual(self.Model.columnCount(), 3)
+        self.assertEqual(self.Model.rowCount(), 6)
+        self.assertEqual(len(self.Model.tPricesMatrix), 2)
+        for iShopIndex in range(len(self.Model.tPricesMatrix)):
+            self.assertEqual(len(self.Model.tPricesMatrix[iShopIndex]), 5,  "1.Testing %d column for row correctness" % (iShopIndex))

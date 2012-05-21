@@ -32,11 +32,12 @@ class PriceCell:
     eSearchResult = SearchResultType.SR_NONE
 
 class ComputerConfModel(QAbstractTableModel):
+    COLUMN_FIX = -1
     lShopsEntries = []
-    lComponentsEntries = {}
+    lComponentsEntries = []
     lShopPlugins = {}
     iLastCol = 0
-    tPricesMatrix = [[]]
+    tPricesMatrix = [[]] # Shops x Components
     def __init__(self, parent = None):
         QAbstractTableModel.__init__(self, parent)
 #        item = ComputerConfModelEntry
@@ -45,7 +46,7 @@ class ComputerConfModel(QAbstractTableModel):
 #        self.shopsSelectedForColumns = []
     def __del__(self):
         del self.lShopsEntries[:]
-        self.lComponentsEntries.clear()
+        del self.lComponentsEntries[:]
         self.lShopPlugins.clear()
         del self.tPricesMatrix[:]
         
@@ -65,30 +66,72 @@ class ComputerConfModel(QAbstractTableModel):
 
     def recalculateCellsValues(self):
         pass
-
+        
     def insertColumns(self,  iColumn, iCount, parent=None):
         if  iColumn < 0 or iColumn > self.columnCount():
             return 0
         if  iCount==1:
             self.beginInsertColumns(QModelIndex(), iColumn, iColumn);
         else:
-            self.beginInsertColumns(QModelIndex(), iColumn, iColumn+iCount);
-        shopItem = ShopEntry
-        iColPos = iColumn
-        for i in range(iCount):
-            self.lShopsEntries.insert(iColPos+i, shopItem)
+            self.beginInsertColumns(QModelIndex(), iColumn, iColumn+iCount);        
+        for iPos in range(iCount):
+            self.lShopsEntries.insert(iColumn, ShopEntry)
         self.iLastCol = len(self.lShopsEntries)
 #    #ifdef VIEW_WITH_FROZEN_COLUMN
         self.iLastCol = self.iLastCol + 1
 #    #endif
-        self.tPricesMatrix = [[]]*len(self.lShopsEntries)
-        for i in range(len(self.tPricesMatrix)):
-            self.tPricesMatrix[i]=[PriceCell]*len(self.lComponentsEntries)
+        #self.recreatePricesMatrix()
+        for iShopIndex in range(iColumn, iColumn+iCount):
+            self.tPricesMatrix.insert(iShopIndex, [])
+            self.tPricesMatrix[iShopIndex]=[PriceCell]*len(self.lComponentsEntries)
         self.endInsertColumns()
         self.recalculateCellsValues()
         self.emit(SIGNAL("headerDataChanged"),Qt.Horizontal, 0,  self.columnCount()-1)
-#        emit headerDataChanged(Qt::Horizontal,0,columnCount()-1);
         return 1
+    
+    def insertRows(self,  iRow, iCount, parent=None): 
+        if iRow < 0 or iRow > self.rowCount():
+            return 0;
+        if iCount == 1:
+            self.beginInsertRows(QModelIndex(), iRow, iRow);
+        else:
+            self.beginInsertRows(QModelIndex(), iRow, iRow+iCount);
+        #compItem = ComponentEntry
+        for iComp in range(iRow, iRow+iCount):
+            self.lComponentsEntries.insert(iComp,  ComponentEntry)
+        
+        for iCol in range(len(self.tPricesMatrix)):
+            for iRow in range(iRow,  iRow+iCount):
+                self.tPricesMatrix[iCol].insert(iRow, PriceCell)
+        #m_ptrPriv->m_iLastRow = m_ptrPriv->vComponentsList.size();
+        #ifdef VIEW_WITH_FROZEN_COLUMN
+        #++m_ptrPriv->m_iLastRow;
+        #endif
+        self.endInsertRows()
+        self.recalculateCellsValues()
+        self.emit(SIGNAL("headerDataChanged"),Qt.Vertical, 0,  self.rowCount()-1)
+        return 1
+    
+    def removeColumns (self,  iColumn, iCount, parent = None):
+        if iCount<=0 or iColumn >= self.columnCount():
+            return 0
+        if (iColumn+iCount) > self.columnCount():
+            iCount= self.columnCount()+self.COLUMN_FIX-iColumn
+        self.beginRemoveColumns(QModelIndex(),iColumn,iColumn+iCount+self.COLUMN_FIX);
+        iStartPos = iColumn
+        iEndPos = iStartPos + iCount
+        #//////////////////////////////////////////////////////////////////////////
+        del self.lShopsEntries[iStartPos:iEndPos]
+        ##
+        del self.tPricesMatrix[iColumn:iColumn+iCount]
+        self.iLastCol = len(self.lShopsEntries)
+        #ifdef VIEW_WITH_FROZEN_COLUMN
+        self.iLastCol = self.iLastCol + 1
+        #endif
+        self.endRemoveColumns()
+        self.recalculateCellsValues();
+        self.emit(SIGNAL("headerDataChanged"),Qt.Horizontal, 0,  self.columnCount()-1)
+        return 1;
 
     def addShopPlugin(self,  ptrPlugin):
         if ptrPlugin == None: 
