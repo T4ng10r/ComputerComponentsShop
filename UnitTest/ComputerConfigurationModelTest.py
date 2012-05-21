@@ -1,7 +1,13 @@
 import os
 import sys
 import unittest
+import time
+import threading
+from PyQt4 import QtCore
+from ConnectionBox import *
 
+### testing Slot/Signal example
+### http://www.commandprompt.com/community/pyqt/x5255.htm 
 try:
 	from Data.ComputerConfigurationModel import ComputerConfModel
 except ImportError:	
@@ -14,10 +20,12 @@ class ComputerConfigurationModelTest(unittest.TestCase):
     """Class for UnitTest of Model"""
     def setUp(self):
         self.Model = ComputerConfModel()
+        self.connectionBox=ConnectionBox()
 
     def tearDown(self):
         del self.Model
-
+        self.connectionBox=None
+    
     def test_01_emptyModelRowColsCount(self):
         self.assertEqual(self.Model.rowCount(), 1)
         self.assertEqual(self.Model.columnCount(), 1)
@@ -34,15 +42,21 @@ class ComputerConfigurationModelTest(unittest.TestCase):
         self.assertEqual(self.Model.columnCount(), 3)
         self.assertEqual(self.Model.rowCount(), 1)
     
-    def test_03_ModelRowColsCount(self):
-        self.assertEqual(self.Model.columnCount(), 1)
+    def test_03_ModelRowColsCleaningModel(self):
+        """To test cleaning model after destruction """
         self.assertEqual(self.Model.rowCount(), 1)
+        self.assertEqual(self.Model.columnCount(), 1)
         
     def test_04_ModelDataChangeEmited(self):
-        #pKomputronikShopPluginStub = KomputronikShopPluginStub
-        #self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
-        
-        pass
+        self.assertEqual( QObject.connect(self.Model,  SIGNAL("dataChanged"),  self.connectionBox.slotSlot), 1)
+        self.assertEqual(self.Model.columnCount(), 1)
+        self.assertEqual(self.Model.rowCount(), 1)
+        pKomputronikShopPluginStub = KomputronikShopPluginStub
+        self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
+        self.assertEqual(self.Model.columnCount(), 2)
+        self.assertEqual(self.Model.rowCount(), 1)
+        self.connectionBox.assertSignalArrived("dataChanged(QModelIndex,QModelIndex)")
+
 #	#jak przetestowac czy opener zostal prawidlowo przygotowany?
 #	def test_01_openerBuild(self):
 #		prevOpener = urllib2._opener

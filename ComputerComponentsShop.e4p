@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project ComputerComponentsShop -->
-<!-- Saved: 2012-05-06, 18:45:27 -->
+<!-- Saved: 2012-05-18, 15:49:42 -->
 <!-- Copyright (C) 2012 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -26,6 +26,7 @@
     <Source>UnitTest/ComputerConfigurationModelTest.py</Source>
     <Source>Data/ShopPluginInterface.py</Source>
     <Source>Data/ShopPluginsStubs.py</Source>
+    <Source>UnitTest/ConnectionBox.py</Source>
   </Sources>
   <Forms>
   </Forms>
