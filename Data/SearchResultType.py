@@ -1,0 +1,5 @@
+class SearchResultType:
+    SR_NONE=0
+    SR_COMPFOUND=1
+    SR_COMPNOTFOUND=2
+    SR_LOADINGFAIL=3

@@ -30,16 +30,36 @@ class ComputerConfigurationModelTest(unittest.TestCase):
         self.assertEqual(self.Model.rowCount(), 1)
         self.assertEqual(self.Model.columnCount(), 1)
     
-    def test_02_ModelRowColsCount(self):
+    def test_02_AddingColumns(self):
         self.assertEqual(self.Model.columnCount(), 1)
         self.assertEqual(self.Model.rowCount(), 1)
-        pKomputronikShopPluginStub = KomputronikShopPluginStub
-        self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
+        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
+        self.Model.insertColumns(0, 1)
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
+        self.assertEqual(self.connectionBox.args[1], 0)
+        self.assertEqual(self.connectionBox.args[2], 1)
         self.assertEqual(self.Model.columnCount(), 2)
         self.assertEqual(self.Model.rowCount(), 1)
-        pProlineShopPluginStub = ProlineShopPluginStub
-        self.assertEqual(self.Model.addShopPlugin(pProlineShopPluginStub), 1)
+        del self.connectionBox
+        self.connectionBox=ConnectionBox()        
+        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
+        self.Model.insertColumns(0, 1)
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
+        self.assertEqual(self.connectionBox.args[1], 0)
+        self.assertEqual(self.connectionBox.args[2], 2)
         self.assertEqual(self.Model.columnCount(), 3)
+        self.assertEqual(self.Model.rowCount(), 1)
+        del self.connectionBox
+        self.connectionBox=ConnectionBox()        
+        self.assertEqual( QObject.connect(self.Model,  SIGNAL("headerDataChanged"),  self.connectionBox.slotSlot), 1)
+        self.Model.insertColumns(2, 5)
+        self.connectionBox.assertSignalArrived("headerDataChanged()")
+        self.assertEqual(self.connectionBox.args[0], Qt.Horizontal)
+        self.assertEqual(self.connectionBox.args[1], 0)
+        self.assertEqual(self.connectionBox.args[2], 7)
+        self.assertEqual(self.Model.columnCount(), 8)
         self.assertEqual(self.Model.rowCount(), 1)
     
     def test_03_ModelRowColsCleaningModel(self):
@@ -48,31 +68,4 @@ class ComputerConfigurationModelTest(unittest.TestCase):
         self.assertEqual(self.Model.columnCount(), 1)
         
     def test_04_ModelDataChangeEmited(self):
-        self.assertEqual( QObject.connect(self.Model,  SIGNAL("dataChanged"),  self.connectionBox.slotSlot), 1)
-        self.assertEqual(self.Model.columnCount(), 1)
-        self.assertEqual(self.Model.rowCount(), 1)
-        pKomputronikShopPluginStub = KomputronikShopPluginStub
-        self.assertEqual(self.Model.addShopPlugin(pKomputronikShopPluginStub), 1)
-        self.assertEqual(self.Model.columnCount(), 2)
-        self.assertEqual(self.Model.rowCount(), 1)
-        self.connectionBox.assertSignalArrived("dataChanged(QModelIndex,QModelIndex)")
-
-#	#jak przetestowac czy opener zostal prawidlowo przygotowany?
-#	def test_01_openerBuild(self):
-#		prevOpener = urllib2._opener
-#		self.assertEqual(prevOpener,None)
-#		HTTPConnector.prepareHttpOpener()
-#		self.assertNotEqual(prevOpener,urllib2._opener)
-#	def test_02_GetSimpleWWWPage(self):
-#		TEST_SITE="http://www.onet.pl"
-#		self.assertEqual(urllib2._opener,None,'Test if there\'s no HTTP opener set')
-#		HTTPConnector.prepareHttpOpener()
-#		self.assertNotEqual(urllib2._opener,None,'Test if HTTP opener is set')
-#		req = urllib2.Request(TEST_SITE)
-#		self.assertNotEqual(req, None)
-#		page = urllib2.urlopen(req)
-#		self.assertNotEqual(page, None)
-#		#f = open('testFile.html','w')
-#		#f.write(page.read())
-#		#.decode('cp1250')
-#		#f.close()
+        pass

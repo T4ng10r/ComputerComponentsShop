@@ -3,6 +3,7 @@ import unittest
 import types
 from PyQt4.QtCore import *
 
+
 class ConnectionBox(QObject):
 
     def __init__(self, *args):
