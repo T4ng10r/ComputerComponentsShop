@@ -7,7 +7,7 @@ from PyQt4.QtCore import Qt
 #    RowInd_CompCode,
 #    RowInd_BestPrice,
 #    RowInd_Coun
-    
+
 class ComputerConfModelRoles:
 	Role_RowActive = Qt.UserRole+1
 	Role_ComponentName = Qt.UserRole+2
@@ -23,19 +23,18 @@ class ComputerConfModelRoles:
 	Role_ShopColumnActive = Qt.UserRole+12
 
 class ShopData:
-    bActive=0
-    sName=''
-    
-class ComponentPrice:
-    iLastPrice=0
-    sUrl=''
-class ComponentData:
-    bActive=0
-    sName=''
-    listPrices =[]
-    def __init__(self):
-        self.bActive = 0
-        self.sName = ''
-        self.listPrices = []
+	bActive=0
+	sName=''
 
-    
+class ComponentPrice:
+	iLastPrice=0
+	sUrl=''
+class ComponentData:
+	bActive=0
+	sName=''
+	listPrices =[]
+	def __init__(self):
+		self.bActive = 0
+		self.sName = ''
+		self.listPrices = []
+
