@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 2.6)
+
+project(ComputerConfShop)
+
+option(COMP_CONF_USE_LOG4QT "Use log4qt to log application behaviour" TRUE)
+option(COMP_CONF_USE_LOG4CPP "Use log4cpp to log application behaviour" FALSE)
+option(COMP_CONF_USE_BOOST "Use BOOST" FALSE)
+option(COMP_CONF_USE_BOOST_LOG "Use BOOST log" FALSE)
+option(COMP_CONF_FROZEN_COLUMN "Use FROZEN COLUMN view and model" TRUE)
+option(COMP_CONF_FROZEN_ROW "Use FROZEN ROW view and model" TRUE)
+option(PLUGIN_DEBUG "Activate DEBUG for plugins" TRUE)
+#option(RL_TTT_UNIT_TESTING "Prepare unit tests" TRUE)
+include_directories(${ComputerConfShop_SOURCE_DIR}/include)
+
+IF (COMP_CONF_USE_LOG4QT)
+	SET(COMP_CONF_USE_LOG4CPP FALSE)
+	SET(COMP_CONF_USE_BOOST_LOG FALSE)
+ELSEIF (COMP_CONF_USE_LOG4CPP)
+	SET(COMP_CONF_USE_LOG4QT FALSE)
+	SET(COMP_CONF_USE_BOOST_LOG FALSE)
+ELSEIF (COMP_CONF_USE_BOOST_LOG)
+	SET(COMP_CONF_USE_LOG4QT FALSE)
+	SET(COMP_CONF_USE_LOG4CPP FALSE)
+ENDIF (COMP_CONF_USE_LOG4QT)
+
+SET ( LOG4QT_LIBRARY_NAME "log4qt" )
+SET ( LOG4CPP_LIBRARY_NAME "log4cpp" )
+
+    #IF (COMP_CONF_USE_LOG4QT)
+    #	IF ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+    #		SET ( LOG4QT_LIBRARY_NAME "log4qtD" )
+    #	ELSE ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+    #		SET ( LOG4QT_LIBRARY_NAME "log4qt" )
+    #	ENDIF ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+    #ENDIF (COMP_CONF_USE_LOG4QT)
+    
+add_subdirectory(Sources)

@@ -1,0 +1,54 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(ArestShopPlugin)
+
+	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+	include_directories(${INCLUDE_DIR}/Plugins)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	find_package(Qt4 REQUIRED QtWebKit QtCore)
+	include(${QT_USE_FILE})
+find_package(Boost)
+IF (Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DHAS_BOOST" )
+ENDIF()
+	
+################################################################################
+################################################################################
+	SET ( PLUGIN_AREST_SRC
+		ArestShop.cpp
+		ArestShop.h 
+		${INCLUDE_DIR}/Plugins/ShopInterface.h
+	)
+	SET ( PLUGIN_AREST_MOC_HEADERS
+		ArestShop.h  ) 
+	SET ( PLUGIN_AREST_EXTRA
+		CMakeLists_Arest_lib.txt 
+	)
+
+	QT4_WRAP_CPP(PLUGIN_AREST_MOC ${PLUGIN_AREST_MOC_HEADERS} OPTIONS -I${INCLUDE_DIR})
+	QT4_ADD_RESOURCES( PLUGIN_AREST_RCC ArestShop.qrc  )
+
+	SOURCE_GROUP(moc FILES ${PLUGIN_AREST_RCC})
+	IF (PLUGIN_DEBUG)
+		add_definitions(-DDEBUG_ACTIVE)
+	ENDIF (PLUGIN_DEBUG)
+
+	add_library(ArestShopPlugin_TestLib STATIC ${PLUGIN_AREST_SRC}
+				${PLUGIN_AREST_MOC} ${PLUGIN_AREST_RCC} ${PLUGIN_AREST_EXTRA})
+    target_link_libraries(ArestShopPlugin_TestLib ${QT_LIBRARIES} ShopPluginInterface)
+	IF (COMP_CONF_USE_LOG4QT)
+		target_link_libraries(ArestShopPlugin_TestLib ${LOG4QT_LIBRARY_NAME})
+		add_dependencies(ArestShopPlugin_TestLib ${LOG4QT_LIBRARY_NAME} ShopPluginInterface)
+		add_definitions(-DUSE_LOG4QT)
+	ELSEIF (COMP_CONF_USE_LOG4CPP)
+		add_definitions(-DUSE_LOG4CPP)
+		add_dependencies(ArestShopPlugin_TestLib ${LOG4CPP_LIBRARY_NAME})
+		target_link_libraries(ArestShopPlugin_TestLib ${QT_LIBRARIES} ShopPluginInterface ${LOG4CPP_LIBRARY_NAME} )
+	ELSE (COMP_CONF_USE_LOG4QT)
+		target_link_libraries(ArestShopPlugin_TestLib ${QT_LIBRARIES} ShopPluginInterface)
+	ENDIF (COMP_CONF_USE_LOG4QT)
+	add_definitions(${QT_DEFINITIONS})
+	set_target_properties(ArestShopPlugin_TestLib PROPERTIES COMPILE_DEFINITIONS WITHOUT_INTERFACE)
+################################################################################
+################################################################################

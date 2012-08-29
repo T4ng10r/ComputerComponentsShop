@@ -1,0 +1,81 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(KomputronikShopPlugin)
+
+	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+	include_directories(${INCLUDE_DIR}/Plugins)
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	find_package(Qt4 REQUIRED QtWebKit QtCore)
+	include(${QT_USE_FILE})
+find_package(Boost)
+IF (Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DHAS_BOOST" )
+ENDIF()
+	
+################################################################################
+################################################################################
+	SET ( PLUGIN_KOMPUTRONIK_SRC
+		KomputronikShop.cpp
+		KomputronikShop.h 
+		${INCLUDE_DIR}/Plugins/ShopInterface.h
+	)
+	SET ( PLUGIN_KOMPUTRONIK_MOC_HEADERS
+		KomputronikShop.h  ) 
+	SET ( PLUGIN_KOMPUTRONIK_EXTRA
+		CMakeLists_Komputronik.txt 
+	)
+
+	QT4_WRAP_CPP(PLUGIN_KOMPUTRONIK_MOC ${PLUGIN_KOMPUTRONIK_MOC_HEADERS} OPTIONS -I${INCLUDE_DIR})
+	QT4_ADD_RESOURCES( PLUGIN_KOMPUTRONIK_RCC KomputronikShop.qrc  )
+
+	IF (WIN32)
+		SOURCE_GROUP(moc FILES ${PLUGIN_KOMPUTRONIK_RCC})
+	ENDIF(WIN32)
+
+	IF (PLUGIN_DEBUG)
+		add_definitions(-DDEBUG_ACTIVE)
+	ENDIF (PLUGIN_DEBUG)
+
+	add_library(KomputronikShopPlugin SHARED ${PLUGIN_KOMPUTRONIK_SRC}
+				${PLUGIN_KOMPUTRONIK_MOC} ${PLUGIN_KOMPUTRONIK_RCC} ${PLUGIN_KOMPUTRONIK_EXTRA})
+	IF (COMP_CONF_USE_LOG4QT)
+		target_link_libraries(KomputronikShopPlugin ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} ShopPluginInterface)
+		add_dependencies(KomputronikShopPlugin ${LOG4QT_LIBRARY_NAME} ShopPluginInterface)
+		add_definitions(-DUSE_LOG4QT)
+	ELSEIF (COMP_CONF_USE_LOG4CPP)
+		add_definitions(-DUSE_LOG4CPP)
+		add_dependencies(KomputronikShopPlugin ${LOG4CPP_LIBRARY_NAME} ShopPluginInterface)
+		target_link_libraries(KomputronikShopPlugin ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} ShopPluginInterface)
+	ELSE (COMP_CONF_USE_LOG4QT)
+		add_dependencies(KomputronikShopPlugin ShopPluginInterface)
+		target_link_libraries(KomputronikShopPlugin ${QT_LIBRARIES} ShopPluginInterface)
+	ENDIF (COMP_CONF_USE_LOG4QT)
+	add_definitions(${QT_DEFINITIONS})
+	add_definitions(-DQT_PLUGIN)
+	add_definitions(-DQT_SHARED)
+	########################################
+	########################################
+	#####path to binary PluginShopPlugin library
+	GET_TARGET_PROPERTY(KOMPUTRONIK_PLUGIN_LIB_PATH KomputronikShopPlugin LOCATION)
+	
+	SET(KOMPUTRONIK_PLUGINS_BIN_DIR ${KomputronikShopPlugin_BINARY_DIR}/${CMAKE_CFG_INTDIR}/)
+	
+	#REPLACE 'pattern_string' 'replace_string' output_var 'input'
+	STRING(REPLACE ${KOMPUTRONIK_PLUGINS_BIN_DIR} "" KOMPUTRONIK_PLUGIN_DLL  ${KOMPUTRONIK_PLUGIN_LIB_PATH})
+	
+	#####path to UnitTest BIN directory
+	#SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/${CMAKE_CFG_INTDIR}/plugins/${KOMPUTRONIK_PLUGIN_DLL})
+	SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/plugins/${KOMPUTRONIK_PLUGIN_DLL})
+	
+	#####path to Main BIN directory
+	#SET(CCS_PLUGINS_DIR ${ComputerConfShopMain_BINARY_DIR}/${CMAKE_CFG_INTDIR}/plugins/${KOMPUTRONIK_PLUGIN_DLL})
+	SET(CCS_PLUGINS_DIR ${ComputerConfShopMain_BINARY_DIR}/plugins/${KOMPUTRONIK_PLUGIN_DLL})
+
+	add_custom_command(TARGET KomputronikShopPlugin POST_BUILD 
+		 COMMAND ${CMAKE_COMMAND} -E copy ${KOMPUTRONIK_PLUGIN_LIB_PATH}  ${UT_PLUGINS_DIR})
+	
+	add_custom_command(TARGET KomputronikShopPlugin POST_BUILD 
+		 COMMAND ${CMAKE_COMMAND} -E copy ${KOMPUTRONIK_PLUGIN_LIB_PATH}  ${CCS_PLUGINS_DIR})
+################################################################################
+################################################################################

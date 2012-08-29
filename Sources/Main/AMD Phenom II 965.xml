@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIGURATION>
+  <SHOPS>
+    <SHOP active="false">Proline</SHOP>
+    <SHOP active="true">Komputronik</SHOP>
+  </SHOPS>
+  <COMPONENTS>
+    <COMPONENT name="AMD Phenom II 965 Black Edition" active="true">
+      <DATA last_price ="579">http://www.proline.pl/?p=AMD+X4+II+965+AM3+B</DATA>
+      <DATA last_price ="489">http://www.komputronik.pl/product/90426/Sprzet_komputerowy/Podzespoly/AMD_Phenom_II_Quad_Core_965_BOX_Black_Edition.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Gigabyte GA-990FXA-UD3" active="false">
+      <DATA last_price ="525">http://www.proline.pl/?p=GIGA+GA-990FXA-UD3</DATA>
+      <DATA last_price ="659">http://www.komputronik.pl/product/129950/Sprzet_komputerowy/Podzespoly/Gigabyte_GA_990FXA_UD3.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Noctua NH-D14" active="false">
+      <DATA last_price ="329">http://www.proline.pl/?p=NOC+NH-D14+SE2011</DATA>
+      <DATA last_price ="339">http://www.komputronik.pl/product/139944/Sprzet_komputerowy/Podzespoly/Noctua_NH_D14_SE2011.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Corsair DDR3 2x 4GB 1866MHz CL9 Vengeance" active="false">
+      <DATA last_price ="250">http://www.proline.pl/?p=CML8GX3M2A1866C9R</DATA>
+      <DATA last_price ="289">http://www.komputronik.pl/product/115698/Sprzet_komputerowy/Podzespoly/Corsair_DDR3_2x_4GB_1866MHz_CL9_Vengeance.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Gigabyte HD6970 2GB 256 PCI-E GDDR5" active="false">
+      <DATA last_price ="0">http://www.proline.pl/?p=GIGA+HD6970+2GB</DATA>
+      <DATA last_price ="0"/>
+    </COMPONENT>
+    <COMPONENT name="Cooler Master HAF RC-932-KKN1-GP Black" active="false">
+      <DATA last_price ="559">http://www.proline.pl/?p=CM+HAF+RC-932</DATA>
+      <DATA last_price ="689">http://www.komputronik.pl/product/62262/Sprzet_komputerowy/Podzespoly/CoolerMaster_HAF_932_Tower_black_bez_zasilacza.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Tacens Radix V 650W 85+" active="false">
+      <DATA last_price ="225">http://www.proline.pl/?p=TAC+RADIX+V+650W</DATA>
+      <DATA last_price ="0"/>
+    </COMPONENT>
+    <COMPONENT name="OCZ Agility 3 SSD 60GB" active="false">
+      <DATA last_price ="265">http://www.proline.pl/?p=OCZ+AGT3-25SAT3-60G</DATA>
+      <DATA last_price ="279">http://www.komputronik.pl/product/124914/Sprzet_komputerowy/Podzespoly/OCZ_Agility_3_SSD_2_5_60GB_525_MB-s_475_MB-s_80k_IOPs.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="OCZ Agility 3 SSD 120GB" active="false">
+      <DATA last_price ="385">http://www.proline.pl/?p=AGT3-25SAT3-120G</DATA>
+      <DATA last_price ="489">http://www.komputronik.pl/product/124689/Sprzet_komputerowy/Podzespoly/OCZ_Agility_3_SSD_2_5_120GB_525_MB-s_500_MB-s_85k_IOPs.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="QNAP TS-212" active="false">
+      <DATA last_price ="749">http://www.proline.pl/?p=QNAP+TS-212</DATA>
+      <DATA last_price ="729">http://www.komputronik.pl/product/118733/Sprzet_komputerowy/Sieci_i_komunikacja/QNAP_sieciowy_serwer_plikow_TS_212.html</DATA>
+    </COMPONENT>
+  </COMPONENTS>
+</CONFIGURATION>

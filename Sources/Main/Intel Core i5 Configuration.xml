@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIGURATION>
+  <SHOPS>
+    <SHOP active="true">Proline</SHOP>
+    <SHOP active="false">Komputronik</SHOP>
+  </SHOPS>
+  <COMPONENTS>
+    <COMPONENT name="Intel Core i5 3450 3,1 GHz 1155" active="false">
+      <DATA last_price ="775">http://www.proline.pl/?p=CORE+I5-3450</DATA>
+      <DATA last_price ="859">http://www.komputronik.pl/product/158238/Sprzet_komputerowy/Podzespoly/Intel_Core_i5_3450_3_10_GHz_BOX.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="MSI Z68MA-ED55 B3 IZ68" active="true">
+      <DATA last_price ="575">http://www.proline.pl/?p=MSI+Z68MA-ED55+B3</DATA>
+      <DATA last_price ="659">http://www.komputronik.pl/product/124654/Sprzet_komputerowy/Podzespoly/MSI_Z68MA_ED55_B3_.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Patriot Viper Xtreme DDR3 2x4GB 2000" active="true">
+      <DATA last_price ="299">http://www.proline.pl/?p=PX538G2000ELK</DATA>
+      <DATA last_price ="329">http://www.komputronik.pl/product/116871/Sprzet_komputerowy/Podzespoly/Patriot_Viper_Xtreme_DDR3_2x4GB_2000MHz_CL9_ELK_XMP.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Gigabyte GV-N670OC-2GD" active="true">
+      <DATA last_price ="0">http://www.proline.pl/?p=ASUS+HD7970+3GB+DC</DATA>
+      <DATA last_price ="0">http://www.komputronik.pl/product/159218/Sprzet_komputerowy/Podzespoly/GeForce_with_CUDA_GTX_670_Gigabyte_2GB_2xDVI_HDM_DPI_PCI_E_OC.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Cooler Master HAF RC-932-KKN1-GP Black" active="true">
+      <DATA last_price ="536">http://www.proline.pl/?p=CM+HAF+RC-932</DATA>
+      <DATA last_price ="689">http://www.komputronik.pl/product/62262/Sprzet_komputerowy/Podzespoly/CoolerMaster_HAF_932_Tower_black_bez_zasilacza.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Noctua NH-D14" active="true">
+      <DATA last_price ="489">http://www.proline.pl/?p=CYCLONE+NOCTUA+D14</DATA>
+      <DATA last_price ="339">http://www.komputronik.pl/product/139944/Sprzet_komputerowy/Podzespoly/Noctua_NH_D14_SE2011.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="Rasurbo GAP 656 650W" active="true">
+      <DATA last_price ="749">http://www.proline.pl/?p=QNAP+TS-212</DATA>
+      <DATA last_price ="439">http://www.komputronik.pl/product/120163/Sprzet_komputerowy/Podzespoly/XFX_XXX_650W_Modular_135mm_80_bronze_SLI_PSU.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="OCZ Agility 3 SSD 60GB" active="true">
+      <DATA last_price ="245">http://www.proline.pl/?p=OCZ+AGT3-25SAT3-60G</DATA>
+      <DATA last_price ="269">http://www.komputronik.pl/product/124914/Sprzet_komputerowy/Podzespoly/OCZ_Agility_3_SSD_2_5_60GB_525_MB-s_475_MB-s_80k_IOPs.html</DATA>
+    </COMPONENT>
+    <COMPONENT name="QNAP TS-212" active="true">
+      <DATA last_price ="749">http://www.proline.pl/?p=QNAP+TS-212</DATA>
+      <DATA last_price ="739">http://www.komputronik.pl/product/118733/Sprzet_komputerowy/Sieci_i_komunikacja/QNAP_sieciowy_serwer_plikow_TS_212.html</DATA>
+    </COMPONENT>
+  </COMPONENTS>
+</CONFIGURATION>

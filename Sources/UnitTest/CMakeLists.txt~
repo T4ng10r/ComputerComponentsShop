@@ -1,0 +1,63 @@
+cmake_minimum_required(VERSION 2.6)
+
+project(UnitTest)
+
+include_directories(${ComputerConfShop_Sources_SOURCE_DIR})
+
+#dodajemy dane dotyczace QT - sciezki, biblioteki
+find_package(Qt4 COMPONENTS QtCore QtGui QtTest QtNetwork REQUIRED )
+include(${QT_USE_FILE})
+	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+	include_directories(${INCLUDE_DIR}/Plugins)
+	include_directories(${INCLUDE_DIR}/tidy)
+	include_directories(${ComputerConfShop_SOURCE_DIR}/Sources/Main)
+	include_directories(${ComputerConfShop_SOURCE_DIR}/Sources/Plugins)
+
+####################
+
+####################
+SET ( SOURCES_TEST_DATA
+		CProlinePluginTest.cpp 
+		CProlinePluginTest.h 
+		CKomputronikPluginTest.cpp
+		CKomputronikPluginTest.h 
+		CComputerConfModelTest.cpp 
+		CComputerConfModelTest.h
+		ProxySettingClass.cpp 
+		CCustomHeadersTest.cpp
+		CCustomHeadersTest.h 
+    CArestPluginTest.cpp
+    CArestPluginTest.h 
+	  )
+
+SET ( SOURCES_MAIN
+      main.cpp
+    )
+
+SET ( SOURCES_TEST_MOC 
+	CComputerConfModelTest.h
+	CCustomHeadersTest.h 
+	CProlinePluginTest.h 
+	CKomputronikPluginTest.h 
+    CArestPluginTest.h 
+    )
+
+QT4_WRAP_CPP(SOURCES_MOC ${SOURCES_TEST_MOC})
+SOURCE_GROUP(moc FILES ${SOURCES_MOC})
+
+SOURCE_GROUP(TestCases FILES ${SOURCES_TEST_DATA})
+    
+add_executable(UnitTest ${SOURCES_MAIN} ${SOURCES_MOC} 
+					${SOURCES_TEST_DATA}
+)
+target_link_libraries(UnitTest ${QT_LIBRARIES} ComputerConfShop_lib ProlineShopPlugin_TestLib 
+					KomputronikShopPlugin_TestLib tidy_lib)
+add_dependencies(UnitTest ShopPluginInterface ProlineShopPlugin 
+	KomputronikShopPlugin ComputerConfShop_lib ProlineShopPlugin_lib ArestShopPlugin)
+
+	add_custom_command(TARGET UnitTest POST_BUILD 
+		 COMMAND ${CMAKE_COMMAND} -E copy "${UnitTest_SOURCE_DIR}/TestPages/page_Komputronik_QNAP TS-212_Refresh.html"
+		 "${UnitTest_BINARY_DIR}/TestPages/page_Komputronik_QNAP TS-212_Refresh.html")
+
+add_test(UnitTest UnitTest)
+
