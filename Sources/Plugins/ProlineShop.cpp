@@ -44,7 +44,7 @@ QString ProlineShopPlugin::shopName() const
 }
 QIcon ProlineShopPlugin::getShopIcon() const
 {
-	return QIcon(":/images/proline.ico");
+	return QIcon(":/images/proline.png");
 }
 QString ProlineShopPlugin::getShopURL() const
 {	
@@ -120,6 +120,15 @@ SelectorsList ProlineShopPlugin::nextSearchPageSelectors()
 	stSelectorsList.push_back("");
 	stSelectorsList.push_back("");
 	stSelectorsList.push_back("");
+	return stSelectorsList;
+}
+SelectorsList ProlineShopPlugin::productImageSelectors()
+{
+	SelectorsList stSelectorsList;
+	//a[class="produkt"]
+	stSelectorsList.push_back("img");
+	stSelectorsList.push_back("name");
+	stSelectorsList.push_back("foto_pic");
 	return stSelectorsList;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -224,6 +233,11 @@ bool ProlineShopPlugin::startElement( const QString &a, const QString & localNam
 	{
 		Proline::bSearchProduktTagOpen=true;
 		Proline::strHrefLink = atts.value("href");
+		return true;
+	}
+	if (m_ProductImageSelectors[0]==strElementName && m_ProductImageSelectors[2]==atts.value(m_ProductImageSelectors[1]))
+	{
+		QString strImageURL = atts.value("src");
 		return true;
 	}
 	if (m_NotFoundPageSelectors[0]==strElementName && m_NotFoundPageSelectors[2]==atts.value(m_NotFoundPageSelectors[1]))

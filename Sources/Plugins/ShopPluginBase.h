@@ -109,6 +109,7 @@ protected:
 	virtual SelectorsList notFoundPageSelectors()=0;
 	virtual SelectorsList refreshPageSelectors();
 	virtual SelectorsList nextSearchPageSelectors()=0;
+	virtual SelectorsList productImageSelectors(){ return SelectorsList();};
 
 	//what to do when page will be not found
 	void pageNotFound();
@@ -141,13 +142,19 @@ protected:
 
 	QString					m_strRefreshURL;
 	//////////////////////////////////////////////////////////////////////////
+	//selectors confirms that parsed page is a single product page
 	SelectorsList			m_ProductPageSelectors;
+	//selectors to identify HTML box with price
 	SelectorsList			m_PriceProductCardSelectors;
+	//inside this HTML selectors lies text with product price
 	SelectorsList			m_PriceProductSelectors;
+	//
 	SelectorsList			m_SearchPageSelectors;
 	SelectorsList			m_SearchPageProduktSelectors;
 	SelectorsList			m_NotFoundPageSelectors;
 	SelectorsList			m_RefreshPageSelectors;
 	SelectorsList			m_NextSearchPageSelectors;
+	//
+	SelectorsList			m_ProductImageSelectors;
 };
 #endif //_CCS_SHOP_PLUGIN_BASE_INCLUDE_

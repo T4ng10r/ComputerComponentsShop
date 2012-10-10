@@ -46,7 +46,7 @@ QString ArestShopPlugin::shopName() const
 }
 QIcon ArestShopPlugin::getShopIcon() const
 {
-	return QIcon(":/images/arest.ico");
+	return QIcon(":/images/arest.png");
 }
 QString ArestShopPlugin::getShopURL() const
 {	

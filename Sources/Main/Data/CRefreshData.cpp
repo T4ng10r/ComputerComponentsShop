@@ -11,6 +11,8 @@ void printDebugLog(const QString & strLog);
 void printErrorLog(const QString & strLog);
 void printWarnLog(const QString & strLog);
 
+#define LOG_REFRESHING
+
 const int ciMaxRefreshingThreads(1);
 
 static void logConnection(QString strConnDesc,bool bResult)
@@ -131,7 +133,7 @@ void CRefreshDataPrivate::stopProcessComp()
 		}
 		else
 		{
-			QObject::disconnect(pShopPlugin, 0, 0, 0);
+			//QObject::disconnect(pShopPlugin, 0, 0, 0);
 			m_vShopCompData.erase(iterShopsMap);
 		}
 		if (m_vShopCompData.size()==0)
@@ -140,7 +142,7 @@ void CRefreshDataPrivate::stopProcessComp()
 	}
 	if (m_vShopCompData.size()==0)
 	{
-		printDebugLog(QString("Refreshing components DATA FINISHED"));
+		printDebugLog(QString("----- Refreshing components DATA FINISHED -----"));
 		emit m_ptrPublic->refreshingFinished();
 	}
 }
@@ -192,7 +194,7 @@ void CRefreshDataPrivate::processComp()
 		MapOfAllShops::iterator iterNextMap;
 		if (bSingleShopCompFinished)
 		{
-			QObject::disconnect(pShopPlugin, 0, 0, 0);
+			//QObject::disconnect(pShopPlugin, 0, 0, 0);
 			iterNextMap=iterShopsMap;
 			iterNextMap++;
 			m_vShopCompData.erase(iterShopsMap);
@@ -203,7 +205,7 @@ void CRefreshDataPrivate::processComp()
 	}
 	if (m_vShopCompData.size()==0)
 	{
-		printInfoLog(QString("Refreshing components DATA FINISHED"));
+		printInfoLog(QString("----- Refreshing components DATA FINISHED -----"));
 		emit m_ptrPublic->refreshingFinished();
 	}
 }
@@ -220,10 +222,10 @@ CRefreshData::~CRefreshData(void)
 //////////////////////////////////////////////////////////////////////////
 void CRefreshData::onRefreshConf()
 {
+	m_ptrPriv->prepareNewRefreshing();
 	int iColumnCount = m_ptrPriv->m_ptrConfigurationModel->columnCount();
 	int iComponentCount = m_ptrPriv->m_ptrConfigurationModel->rowCount();
-	m_ptrPriv->prepareNewRefreshing();
-	printInfoLog(QString("Refreshing components DATA STARTED"));
+	printInfoLog(QString("----- Refreshing components DATA STARTED -----"));
 	for(int iShopIndex=0;iShopIndex<iColumnCount;++iShopIndex)
 	{
 		//deactivated row aren't refreshed
@@ -241,6 +243,9 @@ void CRefreshData::onRefreshConf()
 			ShopData stSingleShop;
 			m_ptrPriv->m_vShopCompData[iterFindShop->second]=stSingleShop;
 		}
+#ifdef LOG_REFRESHING
+		printDebugLog(QString("Shop '%1' prepared for refreshing").arg(strShopName));
+#endif
 		ShopData & stSingleShop = m_ptrPriv->m_vShopCompData[iterFindShop->second];
 		//storing pointer to refresh view item
 		MapOfShopComponents & stComponentsList = stSingleShop.m_Components;
@@ -260,8 +265,16 @@ void CRefreshData::onRefreshConf()
 			m_ptrPriv->m_ptrConfigurationModel->setData(stIndex,0,Role_CellRefreshProgress);
 			stCompData.strCompUrl = m_ptrPriv->m_ptrConfigurationModel->data(stIndex,Role_CompShopURL).toString().trimmed();
 			stComponentsList[stCompData.strCompName]=stCompData;
+#ifdef LOG_REFRESHING
+			printDebugLog(QString("    Component '%1' (%2,%3) URL='%4'")
+				.arg(stCompData.strCompName).arg(stCompData.iCol)
+				.arg(stCompData.iRow).arg(stCompData.strCompUrl) );
+#endif
 		}
 	}
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	printInfoLog(QString("----- Refreshing components IN PROGRESS -----"));
 	m_ptrPriv->processComp();
 }
 void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
@@ -296,6 +309,9 @@ void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
 	//remove from list
 	stComponentsList.erase(stData.strName);
 	iShopPluginFinishedProcessing->quit();
+	//CompPriceData stData
+	
+	printDebugLog(QString(" -- Component download finished '%1'").arg(stData.strName));
 }
 void CRefreshData::onPriceSearchProgress(QString strCompName,ESearchProgress eProgress, int iProgress)
 {

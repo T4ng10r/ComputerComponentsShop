@@ -315,6 +315,7 @@ void ShopPluginBase::prepareToNewSearch()
 		m_NotFoundPageSelectors =		notFoundPageSelectors();
 		m_RefreshPageSelectors =		refreshPageSelectors();
 		m_NextSearchPageSelectors =		nextSearchPageSelectors();
+		m_ProductImageSelectors =		productImageSelectors();
 	}
 
 	prepareHTMLParserForNewSearch();
@@ -324,6 +325,8 @@ void ShopPluginBase::getProductData(const QString &strCompName, const QString & 
 	m_strComponentName = strCompName;
 	prepareToNewSearch();
 	m_stCompData.strName = strCompName;
+	ShopPluginLoggers::printDebugLog(QString("//--------------------//"));
+	ShopPluginLoggers::printDebugLog(m_ptrPriv->makeLogString(QString("New product search - '%1'").arg(strCompName)));
 	QUrl stUrl;
 	if (strOldURL.isEmpty())
 	{
@@ -375,6 +378,7 @@ SelectorsList ShopPluginBase::refreshPageSelectors()
 //////////////////////////////////////////////////////////////////////////
 void ShopPluginBase::onPageDownloadFinished(const QString & strPageContent)
 {
+	ShopPluginLoggers::printDebugLog("Product downloading finished.");
 #ifndef LOAD_WITH_WEBKIT
 	m_ptrPriv->m_strPageHTML = strPageContent;
 	//disconnect(m_ptrPriv->m_pReply, 0,0,0);

@@ -34,6 +34,7 @@ protected:
 	virtual SelectorsList searchPageProductsSelectors();
 	virtual SelectorsList notFoundPageSelectors();
 	virtual SelectorsList nextSearchPageSelectors();
+	virtual SelectorsList productImageSelectors();
 #ifdef USE_XML_PARSER
 	//XML parsing functions
 	virtual bool startElement( const QString &a, const QString & localName, const QString & qName, const QXmlAttributes & atts );
