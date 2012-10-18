@@ -2,77 +2,22 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ProlineShopPlugin)
 
-	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
-	include_directories(${INCLUDE_DIR}/Plugins)
-	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-	find_package(Qt4 REQUIRED QtWebKit QtCore)
-	include(${QT_USE_FILE})
-	IF (COMP_CONF_USE_BOOST)
-		find_package(Boost)
-		IF (Boost_FOUND)
-			INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-			ADD_DEFINITIONS( "-DHAS_BOOST" )
-		ENDIF(Boost_FOUND)
-	ENDIF(COMP_CONF_USE_BOOST)
 ################################################################################
 ################################################################################
 	SET ( PLUGIN_PROLINE_SRC
 		ProlineShop.cpp
 		ProlineShop.h 
-		${INCLUDE_DIR}/Plugins/ShopInterface.h
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
 	)
 	SET ( PLUGIN_PROLINE_MOC_HEADERS
 		ProlineShop.h  ) 
 	SET ( PLUGIN_PROLINE_EXTRA
 		CMakeLists_Proline.txt 
+		ProlineShopSelectors.xml
 	)
 
-	QT4_WRAP_CPP(PLUGIN_PROLINE_MOC ${PLUGIN_PROLINE_MOC_HEADERS} OPTIONS -I${INCLUDE_DIR})
-	QT4_ADD_RESOURCES( PLUGIN_PROLINE_RCC ProlineShop.qrc  )
-
-	IF (WIN32)
-		SOURCE_GROUP(moc FILES ${PLUGIN_PROLINE_MOC})
-	ENDIF(WIN32)
-	add_library(ProlineShopPlugin SHARED ${PLUGIN_PROLINE_SRC}
-				${PLUGIN_PROLINE_MOC} ${PLUGIN_PROLINE_RCC} ${PLUGIN_PROLINE_EXTRA})
-	
-	IF (COMP_CONF_USE_LOG4QT)
-		target_link_libraries(ProlineShopPlugin ${QT_LIBRARIES} ShopPluginInterface  ${LOG4QT_LIBRARY_NAME})
-		add_dependencies(ProlineShopPlugin ${LOG4QT_LIBRARY_NAME} ShopPluginInterface)
-		add_definitions(-DUSE_LOG4QT)
-    ELSEIF (COMP_CONF_USE_LOG4CPP)
-		target_link_libraries(ProlineShopPlugin ${QT_LIBRARIES} ShopPluginInterface ${LOG4CPP_LIBRARY_NAME} )
-		add_dependencies(ProlineShopPlugin ${LOG4CPP_LIBRARY_NAME})
-		add_definitions(-DUSE_LOG4CPP)
-    ELSE (COMP_CONF_USE_LOG4QT)
-		target_link_libraries(ProlineShopPlugin ${QT_LIBRARIES} ShopPluginInterface)
-	ENDIF (COMP_CONF_USE_LOG4QT)
-	
-	add_definitions(${QT_DEFINITIONS})
-	add_definitions(-DQT_PLUGIN)
-	add_definitions(-DQT_SHARED)
-	########################################
-	########################################
-	#####path to binary PluginShopPlugin library
-	GET_TARGET_PROPERTY(PROLINE_PLUGIN_LIB_PATH ProlineShopPlugin LOCATION)
-	
-	SET(PROLINE_PLUGINS_BIN_DIR ${ProlineShopPlugin_BINARY_DIR}/${CMAKE_CFG_INTDIR}/)
-	
-	#REPLACE 'pattern_string' 'replace_string' output_var 'input'
-	STRING(REPLACE ${PROLINE_PLUGINS_BIN_DIR} "" PROLINE_PLUGIN_DLL  ${PROLINE_PLUGIN_LIB_PATH})
-	
-	#####path to UnitTest BIN directory
-	#SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/${CMAKE_CFG_INTDIR}/plugins/${PROLINE_PLUGIN_DLL})
-	SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/plugins/${PROLINE_PLUGIN_DLL})
-	
-	#####path to Main BIN directory
-	#SET(CCS_PLUGINS_DIR ${ComputerConfShopMain_BINARY_DIR}/${CMAKE_CFG_INTDIR}/plugins/${PROLINE_PLUGIN_DLL})
-	SET(CCS_PLUGINS_DIR ${ComputerConfShopMain_BINARY_DIR}/plugins/${PROLINE_PLUGIN_DLL})
-
-	add_custom_command(TARGET ProlineShopPlugin POST_BUILD 
-		 COMMAND ${CMAKE_COMMAND} -E copy ${PROLINE_PLUGIN_LIB_PATH}  ${UT_PLUGINS_DIR})
-	
-	add_custom_command(TARGET ProlineShopPlugin POST_BUILD 
-		 COMMAND ${CMAKE_COMMAND} -E copy ${PROLINE_PLUGIN_LIB_PATH}  ${CCS_PLUGINS_DIR})
+	AddPluginSharedLibrary(ProlineShop PLUGIN_PROLINE_SRC PLUGIN_PROLINE_MOC_HEADERS PLUGIN_PROLINE_EXTRA 0)
+	InstallPlugin(ProlineShop)
+	AddPluginSharedLibrary(ProlineShop PLUGIN_PROLINE_SRC PLUGIN_PROLINE_MOC_HEADERS PLUGIN_PROLINE_EXTRA 1)
 ################################################################################
 ################################################################################

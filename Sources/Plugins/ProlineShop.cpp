@@ -1,11 +1,8 @@
 #include "ProlineShop.h"
-#include <QtWebKit/QWebElement>
-#include <QtWebKit/QWebElementCollection>
-#include <QtWebKit/QWebFrame>
-#include <QtWebKit/QWebPage>
 #include <QtCore/QFile>
 #include <map>
 #include <string>
+#include <QtXml\QDomDocument>
 
 const QString cstrHomePage("http://www.proline.pl");
 const QString cstrShopSuffix("/?prodq=");
@@ -28,7 +25,42 @@ namespace ShopPluginLoggers
 	void printErrorLog(const QString & strLog);
 	void printDebugLog(const QString & strLog);
 }
+//////////////////////////////////////////////////////////////////////////
+class ProlineShopPlugin::ProlineShopPluginPrivate
+{
+public:
+	ProlineShopPluginPrivate();
+	void loadSelectorsFromXML();
+};
 
+ProlineShopPlugin::ProlineShopPluginPrivate::ProlineShopPluginPrivate()
+{
+
+}
+void ProlineShopPlugin::ProlineShopPluginPrivate::loadSelectorsFromXML()
+{
+	QDomDocument doc;
+	QFile file("ProlineSelectors.xml");
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+	if (!doc.setContent(&file)) {
+		file.close();
+		return;
+	}
+	file.close();
+
+	//QDomElement docElem = doc.documentElement();
+
+	//QDomNode n = docElem.firstChild();
+	//while(!n.isNull()) {
+	//	QDomElement e = n.toElement(); // try to convert the node to an element.
+	//	if(!e.isNull()) {
+	//		cout << qPrintable(e.tagName()) << endl; // the node really is an element.
+	//	}
+	//	n = n.nextSibling();
+	//}
+}
+//////////////////////////////////////////////////////////////////////////
 ProlineShopPlugin::ProlineShopPlugin()
 {
 	ShopPluginLoggers::createLoggers(shopName());
@@ -150,51 +182,11 @@ QUrl ProlineShopPlugin::createProductURL(const QString & strUrlPart)
 }
 void ProlineShopPlugin::parseSearchProductPage(SearchResult & stResult,bool & bNextPage)
 {
-#ifdef USE_WEBKIT
-	//////////////////////////////////////////////////////////////////////////
-	SearchResult instResult;
-	QWebFrame * ptrFrame = getWebPage()->mainFrame();
-	printPageContent(ptrFrame->toHtml());
-
-	QWebElementCollection productsLinksCol = ptrFrame->findAllElements("a[class=produkt]");
-	QString strVal;
-	for(int iIndex=0;iIndex<productsLinksCol.count();++iIndex)
-	{
-		QWebElement productLink(productsLinksCol.at(iIndex));
-		QUrl stProductURL = createProductURL(productLink.attribute("href"));
-		//////////////////////////////////////////////////////////////////////////
-		QWebElement productName = productLink.findFirst("span[class=produkt]");
-		if (productName.isNull())
-		{
-			productName = productLink.findFirst("span[class=promocja]");
-		}
-		std::string strVal = productName.toOuterXml().toStdString();
-		QString strName = productName.toPlainText();
-		stResult.insert(std::make_pair(strName,stProductURL));
-	}
-#endif
-#ifdef USE_XML_PARSER
 	stResult.insert(Proline::mSearchResult.begin(),Proline::mSearchResult.end());
-#endif
 	bNextPage=false;
 }
 void ProlineShopPlugin::parseProductPage()
 {
-#ifdef USE_WEBKIT
-	//CompPriceData stCompData;
-	QWebFrame * ptrFrame = getWebPage()->mainFrame( );
-	int iCount = ptrFrame->childFrames().size();
-	printPageContent(ptrFrame->toHtml());
-	QWebElement elCompFullName = ptrFrame->findFirstElement("h1[class=prodid]");
-	QWebElement elCompGrossPrice= ptrFrame->findFirstElement("b[class=cena_b]");
-	m_stCompData.dPrice = elCompGrossPrice.toPlainText().toDouble();
-	m_stCompData.eSearchResult = SR_COMPFOUND;
-	m_stCompData.strName = m_strComponentName;
-	//////////////////////////////////////////////////////////////////////////
-	m_stCompData.strCompURL = getWebPage()->mainFrame()->url().toString();
-	ShopPluginLoggers::printDebugLog("Product found.");
-#endif
-#ifdef USE_XML_PARSER
 	m_stCompData.dPrice = Proline::dPrice;
 	m_stCompData.eSearchResult = SR_COMPFOUND;
 	m_stCompData.strName = m_strComponentName;
@@ -202,9 +194,7 @@ void ProlineShopPlugin::parseProductPage()
 	//////////////////////////////////////////////////////////////////////////
 	//stCompData.strCompURL = getWebPage()->mainFrame()->url().toString();
 	//stResult.insert(mSearchResult.begin(),mSearchResult.end());
-#endif
 }
-#ifdef USE_XML_PARSER
 bool ProlineShopPlugin::startElement( const QString &a, const QString & localName, const QString & qName, const QXmlAttributes & atts )
 {
 	QString strElementName = qName.toLower();
@@ -267,7 +257,6 @@ bool ProlineShopPlugin::characters ( const QString & ch )
 
 	return true;
 }
-#endif
 #ifndef WITHOUT_INTERFACE 
 Q_EXPORT_PLUGIN2("ProlineShopPlugin",ProlineShopPlugin);
 #endif

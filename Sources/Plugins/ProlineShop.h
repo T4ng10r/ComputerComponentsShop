@@ -3,8 +3,7 @@
 #include <ShopInterface.h>
 #include <ShopPluginBase.h>
 #include <QtCore/QtPlugin>
-
-class ProlineShopPluginPrivate;
+#include <memory>
 
 class ProlineShopPlugin : public ShopPluginBase
 {
@@ -35,11 +34,12 @@ protected:
 	virtual SelectorsList notFoundPageSelectors();
 	virtual SelectorsList nextSearchPageSelectors();
 	virtual SelectorsList productImageSelectors();
-#ifdef USE_XML_PARSER
 	//XML parsing functions
 	virtual bool startElement( const QString &a, const QString & localName, const QString & qName, const QXmlAttributes & atts );
 	virtual bool endElement ( const QString & namespaceURI, const QString & localName, const QString & qName );
 	virtual bool characters ( const QString & ch );
-#endif
+private:
+	class ProlineShopPluginPrivate; // forward declaration
+	std::auto_ptr<ProlineShopPluginPrivate> m_ptrPriv;
 };
 #endif //_CCS_PROLINE_SHOP_INCLUDE_

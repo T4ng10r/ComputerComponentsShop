@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
-IF (COMP_CONF_USE_LOG4QT)
-
 project(log4qt)
 
-SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+SET( INCLUDE_DIR ${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
 
 #dodajemy dane dotyczace QT - sciezki, biblioteki
 find_package(Qt4 COMPONENTS QtCore REQUIRED )
@@ -131,5 +129,3 @@ SET( LOG4QT_MOC_HEADERS
 
   ADD_LIBRARY ( ${LOG4QT_LIBRARY_NAME} ${LOG4QT_SOURCES} ${LOG4QT_HEADERS}  ${LOG4QT_MOC} )
   target_link_libraries(${LOG4QT_LIBRARY_NAME} ${QT_LIBRARIES})
-
-ENDIF (COMP_CONF_USE_LOG4QT)

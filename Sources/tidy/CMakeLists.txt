@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(tidy)
 
-  include_directories(${ComputerConfShop_SOURCE_DIR}/include)
-  include_directories(${ComputerConfShop_SOURCE_DIR}/include/tidy)
+  include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
+  include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
   SET ( TIDY_SRC
@@ -60,10 +60,10 @@ project(tidy)
 
 
   SET ( TIDY_INCLUDE
-    ${ComputerConfShop_SOURCE_DIR}/include/tidy/buffio.h
-    ${ComputerConfShop_SOURCE_DIR}/include/tidy/platform.h
-    ${ComputerConfShop_SOURCE_DIR}/include/tidy/tidy.h
-    ${ComputerConfShop_SOURCE_DIR}/include/tidy/tidyenum.h
+      ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy/buffio.h
+      ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy/platform.h
+      ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy/tidy.h
+      ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy/tidyenum.h
       )
 
       add_library(tidy_lib STATIC ${TIDY_SRC} ${TIDY_INCLUDE} )

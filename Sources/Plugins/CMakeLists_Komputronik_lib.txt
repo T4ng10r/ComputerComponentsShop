@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(KomputronikShopPlugin_lib)
 
-	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+	SET( INCLUDE_DIR ${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
 	include_directories(${INCLUDE_DIR}/Plugins)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 	find_package(Qt4 REQUIRED QtWebKit QtCore)

@@ -1,31 +1,24 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
-project(ComputerConfShopMain)
+project(ComputerConfShop)
 
 #dodajemy dane dotyczace QT - sciezki, biblioteki
-find_package(Qt4 REQUIRED QtNetwork QtCore QtGui QtXml)
 include(${QT_USE_FILE})
 
-IF (COMP_CONF_USE_BOOST)
-	find_package(Boost)
-	IF (Boost_FOUND)
-	    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-	    ADD_DEFINITIONS( "-DHAS_BOOST" )
-	ENDIF(Boost_FOUND)
-ENDIF(COMP_CONF_USE_BOOST)
+IF (Boost_FOUND)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+  ADD_DEFINITIONS( "-DHAS_BOOST" )
+ENDIF(Boost_FOUND)
 
 
-IF (COMP_CONF_FROZEN_COLUMN)
+IF (COMPCONF_FROZEN_COLUMN)
   add_definitions(-DVIEW_WITH_FROZEN_COLUMN)
-ENDIF (COMP_CONF_FROZEN_COLUMN)
-IF (COMP_CONF_FROZEN_ROW)
+ENDIF (COMPCONF_FROZEN_COLUMN)
+IF (COMPCONF_FROZEN_ROW)
   add_definitions(-DVIEW_WITH_FROZEN_ROW)
-ENDIF (COMP_CONF_FROZEN_ROW)
+ENDIF (COMPCONF_FROZEN_ROW)
 
-
-	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
-
-	include_directories(${INCLUDE_DIR})
+	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
     SET ( SOURCES_OTHER
@@ -74,12 +67,12 @@ ENDIF (COMP_CONF_FROZEN_ROW)
     )
 
     SET ( SOURCES_PLUGINS
-		${INCLUDE_DIR}/Plugins/ShopInterface.h
-		${INCLUDE_DIR}/Plugins/CompPriceData.h
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/CompPriceData.h
         )
    
     SET ( SOURCES_MOC_HEADERS
-		${INCLUDE_DIR}/Plugins/ShopInterface.h
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
 		Data/ComputerConfModel.h
 		Data/CDataThread.h
 		Data/CRefreshData.h
@@ -114,25 +107,30 @@ ENDIF (WIN32)
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         main.cpp ${SOURCES_RCC} ${SOURCES_DATA_MODELS})
 
-    IF (COMP_CONF_USE_LOG4QT)
-	  add_definitions(-DUSE_LOG4QT)
-	  add_dependencies(ComputerConfShop ${LOG4QT_LIBRARY_NAME})
-	  add_dependencies(ComputerConfShop_lib ${LOG4QT_LIBRARY_NAME})
-      target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
-      target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
-    ELSEIF (COMP_CONF_USE_LOG4CPP)
-	  add_definitions(-DUSE_LOG4CPP)
-	  add_dependencies(ComputerConfShop ${LOG4CPP_LIBRARY_NAME})
-	  add_dependencies(ComputerConfShop_lib ${LOG4CPP_LIBRARY_NAME})
-      target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
-      target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
-	ELSEIF (COMP_CONF_USE_BOOST_LOG)
-		target_link_libraries(ComputerConfShop ${QT_LIBRARIES} )
-		target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} )
-		add_definitions(-DUSE_BOOSTLOG)
-    ELSE (COMP_CONF_USE_LOG4QT)
-      target_link_libraries(ComputerConfShop ${QT_LIBRARIES}  )    
-      target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES}  )    
-    ENDIF (COMP_CONF_USE_LOG4QT)
+
+	SET(LIBRARIES_LIST ${QT_LIBRARIES})
+	addLoggerLibrariesDependencies(ComputerConfShop ${LIBRARIES_LIST})
+	addLoggerLibrariesDependencies(ComputerConfShop_lib ${LIBRARIES_LIST})
+
+#    IF (COMP_CONF_USE_LOG4QT)
+#	  add_definitions(-DUSE_LOG4QT)
+#	  add_dependencies(ComputerConfShop ${LOG4QT_LIBRARY_NAME})
+#	  add_dependencies(ComputerConfShop_lib ${LOG4QT_LIBRARY_NAME})
+ #     target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
+  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
+   # ELSEIF (COMP_CONF_USE_LOG4CPP)
+#	  add_definitions(-DUSE_LOG4CPP)
+#	  add_dependencies(ComputerConfShop ${LOG4CPP_LIBRARY_NAME})
+#	  add_dependencies(ComputerConfShop_lib ${LOG4CPP_LIBRARY_NAME})
+ #     target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
+  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
+#	ELSEIF (COMP_CONF_USE_BOOST_LOG)
+#		target_link_libraries(ComputerConfShop ${QT_LIBRARIES} )
+#		target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} )
+#		add_definitions(-DUSE_BOOSTLOG)
+ #   ELSE (COMP_CONF_USE_LOG4QT)
+  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES}  )    
+   #   target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES}  )    
+#    ENDIF (COMP_CONF_USE_LOG4QT)
 
 

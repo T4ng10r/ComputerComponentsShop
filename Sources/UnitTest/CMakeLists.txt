@@ -2,12 +2,15 @@ cmake_minimum_required(VERSION 2.6)
 
 project(UnitTest)
 
-include_directories(${ComputerConfShop_Sources_SOURCE_DIR})
-
 #dodajemy dane dotyczace QT - sciezki, biblioteki
-find_package(Qt4 COMPONENTS QtCore QtGui QtTest QtNetwork REQUIRED )
+#find_package(Qt4 COMPONENTS QtCore QtGui QtTest QtNetwork REQUIRED )
 include(${QT_USE_FILE})
-	SET( INCLUDE_DIR ${ComputerConfShop_SOURCE_DIR}/include)
+
+	include_directories(${ComputerConfShop_SOURCE_DIR})
+	include_directories(${ComputerConfShop_Sources_SOURCE_DIR})
+	include_directories(${ComputerConfShop_Sources_SOURCE_DIR}/Plugins)
+	SET( INCLUDE_DIR ${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
+	include_directories(${INCLUDE_DIR})
 	include_directories(${INCLUDE_DIR}/Plugins)
 	include_directories(${INCLUDE_DIR}/tidy)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
