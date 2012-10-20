@@ -14,7 +14,7 @@ project(KomputronikShopPlugin)
 	)
 
 	AddPluginSharedLibrary(KomputronikShop PLUGIN_KOMPUTRONIK_SRC PLUGIN_KOMPUTRONIK_MOC_HEADERS PLUGIN_KOMPUTRONIK_EXTRA 0)
-	InstallPlugin(ArestShop)
+	InstallPlugin(KomputronikShop)
 	AddPluginSharedLibrary(KomputronikShop PLUGIN_KOMPUTRONIK_SRC PLUGIN_KOMPUTRONIK_MOC_HEADERS PLUGIN_KOMPUTRONIK_EXTRA 1)
 ################################################################################
 ################################################################################

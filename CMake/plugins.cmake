@@ -66,9 +66,25 @@ function(InstallPlugin LibraryName)
 	add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
 		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH}  ${UT_PLUGINS_DIR})
 	
-	add_custom_command(TARGET ProlineShopPlugin POST_BUILD 
+ add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
 		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH}  ${CCS_PLUGINS_DIR})
 		 
 #		 ProlineSelectors.xml
     
 endfunction(InstallPlugin)
+
+function(addLoggerLibrariesDependencies LibraryName OtherLibraries)
+  IF (Logger STREQUAL "log4Qt")
+    add_definitions(-DUSE_LOG4QT)
+    SET(LOGGER_LIBRARY ${LOG4QT_LIBRARY_NAME})
+  ELSEIF (Logger STREQUAL "log4Cpp")
+    add_definitions(-DUSE_LOG4CPP)
+    SET(LOGGER_LIBRARY ${LOG4CPP_LIBRARY_NAME})
+  ELSE (Logger STREQUAL "log4Qt")
+    SET(LOGGER_LIBRARY "")
+  ENDIF (Logger STREQUAL "log4Qt")
+
+  target_link_libraries(${LibraryName} ${${OtherLibraries}} ${LOGGER_LIBRARY})
+  add_dependencies(${LibraryName} ${LOGGER_LIBRARY} ${${OtherLibraries}})
+endfunction(addLoggerLibrariesDependencies)
+

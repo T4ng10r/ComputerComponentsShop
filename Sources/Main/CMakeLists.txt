@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(ComputerConfShop)
 
 #dodajemy dane dotyczace QT - sciezki, biblioteki
+find_package(Qt4 REQUIRED QtNetwork QtGui QtCore QtXml QtTest)
 include(${QT_USE_FILE})
 
 IF (Boost_FOUND)
@@ -73,20 +74,21 @@ ENDIF (COMPCONF_FROZEN_ROW)
    
     SET ( SOURCES_MOC_HEADERS
 		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
-		Data/ComputerConfModel.h
-		Data/CDataThread.h
-		Data/CRefreshData.h
-		GUI/MainWindow.h
-		GUI/ComponentHeaderEntry.h
-		GUI/ShopHeaderEntry.h
-		GUI/ProxySettingsGUI.h
-		GUI/FrozenTableView.h
-		GUI/CustomHeaderView.h
-		GUI/CustomHeaderViewEntry.h
-		GUI/ComponentDelegate.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/ComputerConfModel.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/CDataThread.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/CRefreshData.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/MainWindow.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/ComponentHeaderEntry.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/ShopHeaderEntry.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/ProxySettingsGUI.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/FrozenTableView.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/CustomHeaderView.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/CustomHeaderViewEntry.h
+		${CMAKE_CURRENT_SOURCE_DIR}/GUI/ComponentDelegate.h
         )
-    
-    qt_wrap_cpp(ComputerConfShop SOURCES_MOC ${SOURCES_MOC_HEADERS})
+        
+    #qt4_wrap_cpp(ComputerConfShop SOURCES_MOC ${SOURCES_MOC_HEADERS})
+    qt4_wrap_cpp(SOURCES_MOC ${SOURCES_MOC_HEADERS})
     QT4_ADD_RESOURCES( SOURCES_RCC ConfCompShop.qrc )
     
 IF (WIN32)
@@ -98,17 +100,24 @@ IF (WIN32)
     SOURCE_GROUP(Plugins FILES ${SOURCES_PLUGINS})
 ENDIF (WIN32)
     
+IF (WIN32)
     add_executable(ComputerConfShop ${SOURCES_DATA} ${SOURCES_MOC} 
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         ${SOURCES_RCC} ${SOURCES_DATA_MODELS} main.cpp TODO.txt )
+ELSE (WIN32)
+    add_executable(ComputerConfShop ${SOURCES_DATA} ${SOURCES_MOC} 
+        ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
+        ${SOURCES_RCC} ${SOURCES_DATA_MODELS} main.cpp TODO.txt )
+ENDIF (WIN32)
 	add_dependencies(ComputerConfShop ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
 
     add_library(ComputerConfShop_lib STATIC ${SOURCES_DATA} ${SOURCES_MOC} 
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         main.cpp ${SOURCES_RCC} ${SOURCES_DATA_MODELS})
+        
+	add_dependencies(ComputerConfShop_lib ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
 
-
-	SET(LIBRARIES_LIST ${QT_LIBRARIES})
+	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
 	addLoggerLibrariesDependencies(ComputerConfShop ${LIBRARIES_LIST})
 	addLoggerLibrariesDependencies(ComputerConfShop_lib ${LIBRARIES_LIST})
 

@@ -76,8 +76,8 @@ add_executable(UnitTest ${SOURCES_MAIN} ${SOURCES_MOC}
 target_link_libraries(UnitTest ${QT_LIBRARIES} ComputerConfShop_lib ProlineShopPlugin_TestLib 
 					KomputronikShopPlugin_TestLib ArestShopPlugin_TestLib tidy_lib)
 add_dependencies(UnitTest ComputerConfShop_lib 
-    ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin
-	KomputronikShopPlugin_TestLib ProlineShopPlugin_TestLib ArestShopPlugin_TestLib)
+    ShopPluginInterface ArestShopPlugin ProlineShopPlugin KomputronikShopPlugin 
+	ArestShopPlugin_TestLib KomputronikShopPlugin_TestLib ProlineShopPlugin_TestLib )
 
 	add_custom_command(TARGET UnitTest POST_BUILD 
 		 COMMAND ${CMAKE_COMMAND} -E copy "${UnitTest_SOURCE_DIR}/TestPages/page_Komputronik_QNAP TS-212_Refresh.html"

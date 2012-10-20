@@ -43,10 +43,7 @@ endif(WIN32)
 ################################################################################
 ################################################################################
 include(CMakeLists_Proline.txt)
-#include(CMakeLists_Proline_lib.txt)
 include(CMakeLists_Komputronik.txt)
-#include(CMakeLists_Komputronik_lib.txt)
 include(CMakeLists_Arest.txt)
-#include(CMakeLists_Arest_lib.txt)
 ################################################################################
 ################################################################################
