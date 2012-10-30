@@ -110,7 +110,7 @@ protected:
 	virtual SelectorsList refreshPageSelectors();
 	virtual SelectorsList nextSearchPageSelectors()=0;
 	virtual SelectorsList productImageSelectors(){ return SelectorsList();};
-
+	void loadSelectorsFromXML(const QString & strPluginName);
 	//what to do when page will be not found
 	void pageNotFound();
 	//virtual void SinglePageFound(){};

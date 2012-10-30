@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SELECTORS>
+    <SINGLE_PRODUCT_PAGE tag="div" attrName="class" attrValue="mainColumnContainer productFullViewContainer"/>
+    <PRODUCT_PRICE_CARD tag="div" attrName="class" attrValue="pricing internetPrice"/>
+    <PRODUCT_PRICE tag="div" attrName="class" attrValue="altFontFace price"/>
+    <PRODUCT_SEARCH_LIST_TEST tag="div" attrName="class" attrValue="mainColumnContainer productsListContainer"/>
+    <SINGLE_ENTRY_ON_PRODUCT_SEARCH_LIST tag="div" attrName="class" attrValue="name"/>
+    <PRODUCT_NOT_FOUND tag="div" attrName="class" attrValue="noProductsFound"/>
+    <PRODUCT_SEARCH_LIST_NEXT_PAGE tag="li" attrName="class" attrValue="next"/>
+    <PRODUCT_IMAGE tag="" attrName="" attrValue=""/>
+    <REFRESH_PAGE tag="meta" attrName="http-equiv" attrValue="refresh"/>
+</SELECTORS>
+

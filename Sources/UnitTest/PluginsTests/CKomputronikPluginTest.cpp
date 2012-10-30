@@ -214,6 +214,6 @@ void CKomputronikPluginTest::testPluginFindItem_LoadingQNAP_TS212()
 	CompPriceData stCompPriceData;
 	stCompPriceData = arguments.at(0).value<CompPriceData>();
 	QVERIFY(stCompPriceData.eSearchResult==SR_COMPFOUND);
-	QVERIFY(stCompPriceData.dPrice==739);
+	QVERIFY(stCompPriceData.dPrice==679);
 	QVERIFY(!stCompPriceData.strName.isEmpty());
 }

@@ -144,7 +144,7 @@ void CKomputronikParserTest::testPluginParsing_ProductPage()
 	QVERIFY(!stKomputronikTest.isLoadingNextSearchPage());
 
 	stKomputronikTest.parseProductPage();
-	QCOMPARE(double(stKomputronikTest.m_stCompData.dPrice),double(509));
+	QCOMPARE(double(stKomputronikTest.m_stCompData.dPrice),double(389));
 	QCOMPARE(stKomputronikTest.m_stCompData.eSearchResult,SR_COMPFOUND);
 }
 void CKomputronikParserTest::testPluginParsing_NotFoundPage()
@@ -169,7 +169,7 @@ void CKomputronikParserTest::testPluginParsing_NotFoundPage()
 	//////////////////////////////////////////////////////////////////////////
 	QVERIFY(stKomputronikTest.isNotFoundPage());
 	QVERIFY(!stKomputronikTest.isSingleProductPage());
-	QVERIFY(!stKomputronikTest.isSearchProductPage());
+	QVERIFY(stKomputronikTest.isSearchProductPage());
 	QVERIFY(!stKomputronikTest.isRefreshNeeded());
 	QVERIFY(stKomputronikTest.isLoadingNextSearchPage());
 }
@@ -197,5 +197,5 @@ void CKomputronikParserTest::testPluginParsing_SingleSearchPage()
 	QVERIFY(!stKomputronikTest.isSingleProductPage());
 	QVERIFY(stKomputronikTest.isSearchProductPage());
 	QVERIFY(!stKomputronikTest.isRefreshNeeded());
-	QVERIFY(!stKomputronikTest.isLoadingNextSearchPage());
+	QVERIFY(stKomputronikTest.isLoadingNextSearchPage());
 }

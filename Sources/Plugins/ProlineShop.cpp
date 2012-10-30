@@ -2,11 +2,11 @@
 #include <QtCore/QFile>
 #include <map>
 #include <string>
-#include <QtXml\QDomDocument>
 
 const QString cstrHomePage("http://www.proline.pl");
 const QString cstrShopSuffix("/?prodq=");
 const QString cstrPricessTableRegExp("<table class=\"cennik\">.*</table>");
+const QString cstrProlineSelectorsFile("ProlineShopSelectors.xml");
 
 namespace Proline
 {
@@ -30,40 +30,16 @@ class ProlineShopPlugin::ProlineShopPluginPrivate
 {
 public:
 	ProlineShopPluginPrivate();
-	void loadSelectorsFromXML();
 };
 
 ProlineShopPlugin::ProlineShopPluginPrivate::ProlineShopPluginPrivate()
 {
-
-}
-void ProlineShopPlugin::ProlineShopPluginPrivate::loadSelectorsFromXML()
-{
-	QDomDocument doc;
-	QFile file("ProlineSelectors.xml");
-	if (!file.open(QIODevice::ReadOnly))
-		return;
-	if (!doc.setContent(&file)) {
-		file.close();
-		return;
-	}
-	file.close();
-
-	//QDomElement docElem = doc.documentElement();
-
-	//QDomNode n = docElem.firstChild();
-	//while(!n.isNull()) {
-	//	QDomElement e = n.toElement(); // try to convert the node to an element.
-	//	if(!e.isNull()) {
-	//		cout << qPrintable(e.tagName()) << endl; // the node really is an element.
-	//	}
-	//	n = n.nextSibling();
-	//}
 }
 //////////////////////////////////////////////////////////////////////////
 ProlineShopPlugin::ProlineShopPlugin()
 {
 	ShopPluginLoggers::createLoggers(shopName());
+	loadSelectorsFromXML(cstrProlineSelectorsFile);
 }
 ProlineShopPlugin::~ProlineShopPlugin(){}
 QString ProlineShopPlugin::pluginName() const
@@ -165,9 +141,7 @@ SelectorsList ProlineShopPlugin::productImageSelectors()
 }
 //////////////////////////////////////////////////////////////////////////
 void ProlineShopPlugin::NotFoundPage()
-{
-
-}
+{}
 QUrl ProlineShopPlugin::createSearchURL(const QString & strName)
 {
 	QString strUrl(cstrHomePage+cstrShopSuffix);

@@ -56,19 +56,35 @@ function(InstallPlugin LibraryName)
       ${${LibraryName}Plugin_LIB_PATH})
 	
 	#####path to UnitTest BIN directory
-	SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/plugins/${${LibraryName}_PLUGIN_DLL})
+  SET(UT_PLUGINS_DIR ${UnitTest_BINARY_DIR}/plugins)
+  #SET(UT_PLUGINS_DLL ${UT_PLUGINS_DIR}/${${LibraryName}_PLUGIN_DLL})
   #message(STATUS "UnitTests Bin Dir: " ${UnitTest_BINARY_DIR})
 	
 	#####path to Main BIN directory
-	SET(CCS_PLUGINS_DIR ${ComputerConfShop_BINARY_DIR}/plugins/${${LibraryName}_PLUGIN_DLL})
+	SET(CCS_PLUGINS_DIR ${ComputerConfShop_BINARY_DIR}/plugins)
+  #SET(CCS_PLUGINS_DLL ${CCS_PLUGINS_DIR}/${${LibraryName}_PLUGIN_DLL})
   #message(STATUS "ComputerConf Bin Dir: " ${ComputerConfShopMain_BINARY_DIR})
 
 	add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
-		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH}  ${UT_PLUGINS_DIR})
+		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH} ${UT_PLUGINS_DIR}/${${LibraryName}_PLUGIN_DLL})
 	
- add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
-		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH}  ${CCS_PLUGINS_DIR})
-		 
+  add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
+		 COMMAND ${CMAKE_COMMAND} -E copy ${${LibraryName}Plugin_LIB_PATH} ${CCS_PLUGINS_DIR}/${${LibraryName}_PLUGIN_DLL})
+	
+  SET(${LibraryName}_SELECTORS_FILE ${LibraryName}Selectors.xml)
+
+  #message(STATUS "SRC PATH:  " ${${LibraryName}Plugin_SOURCE_DIR}/${${LibraryName}_SELECTORS_FILE})
+  #message(STATUS "DST PATH:  " ${UT_PLUGINS_DIR}/${${LibraryName}_SELECTORS_FILE})
+	add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${${LibraryName}Plugin_SOURCE_DIR}/${${LibraryName}_SELECTORS_FILE}
+      ${UT_PLUGINS_DIR}/${${LibraryName}_SELECTORS_FILE})
+
+	add_custom_command(TARGET ${LibraryName}Plugin POST_BUILD 
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${${LibraryName}Plugin_SOURCE_DIR}/${${LibraryName}_SELECTORS_FILE}
+      ${CCS_PLUGINS_DIR}/${${LibraryName}_SELECTORS_FILE})
+
 #		 ProlineSelectors.xml
     
 endfunction(InstallPlugin)

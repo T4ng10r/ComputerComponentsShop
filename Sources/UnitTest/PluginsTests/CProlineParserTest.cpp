@@ -106,7 +106,7 @@ void CProlineParserTest::testPluginParsing_ProductPage()
 	QVERIFY(!stProlineTest.isLoadingNextSearchPage());
 
 	stProlineTest.parseProductPage();
-	QCOMPARE(double(stProlineTest.m_stCompData.dPrice),double(579));
+	QCOMPARE(double(stProlineTest.m_stCompData.dPrice),double(355));
 	QCOMPARE(stProlineTest.m_stCompData.eSearchResult,SR_COMPFOUND);
 }
 void CProlineParserTest::testPluginParsing_NotFoundPage()

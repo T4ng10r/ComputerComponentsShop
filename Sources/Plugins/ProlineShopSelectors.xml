@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SELECTORS>
+    <SINGLE_PRODUCT_PAGE tag="a" attrName="name" attrValue="topprodid"/>
+    <PRODUCT_PRICE_CARD tag="div" attrName="class" attrValue="cena_karta"/>
+    <PRODUCT_PRICE tag="b" attrName="class" attrValue="cena_b"/>
+    <PRODUCT_SEARCH_LIST_TEST tag="a" attrName="name" attrValue="cennik"/>
+    <SINGLE_ENTRY_ON_PRODUCT_SEARCH_LIST tag="a" attrName="class" attrValue="produkt"/>
+    <PRODUCT_NOT_FOUND tag="div" attrName="class" attrValue="brak-wynikow"/>
+    <PRODUCT_SEARCH_LIST_NEXT_PAGE tag="" attrName="" attrValue=""/>
+    <PRODUCT_IMAGE tag="img" attrName="name" attrValue="foto_pic"/>
+    <REFRESH_PAGE tag="meta" attrName="http-equiv" attrValue="refresh"/>
 </SELECTORS>
 

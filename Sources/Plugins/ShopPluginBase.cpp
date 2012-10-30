@@ -11,6 +11,7 @@
 #include <tidy.h>
 #include <buffio.h>
 #endif
+#include <QtXml\QDomDocument>
 
 #include <QtCore/QTimer>
 #include <list>
@@ -308,13 +309,37 @@ void ShopPluginBase::prepareToNewSearch()
 	if (0==m_ProductPageSelectors.size())
 	{
 		m_ProductPageSelectors =		produktPageTestSelectors();
+	}
+	if (0==m_PriceProductCardSelectors.size())
+	{
 		m_PriceProductCardSelectors=	produktPriceCardSelectors();
+	}
+	if (0==m_PriceProductSelectors.size())
+	{
 		m_PriceProductSelectors=		produktPriceSelectors();
+	}
+	if (0==m_SearchPageSelectors.size())
+	{
 		m_SearchPageSelectors =			searchPageTestSelectors();
+	}
+	if (0==m_SearchPageProduktSelectors.size())
+	{
 		m_SearchPageProduktSelectors =	searchPageProductsSelectors();
+	}
+	if (0==m_NotFoundPageSelectors.size())
+	{
 		m_NotFoundPageSelectors =		notFoundPageSelectors();
+	}
+	if (0==m_RefreshPageSelectors.size())
+	{
 		m_RefreshPageSelectors =		refreshPageSelectors();
+	}
+	if (0==m_NextSearchPageSelectors.size())
+	{
 		m_NextSearchPageSelectors =		nextSearchPageSelectors();
+	}
+	if (0==m_ProductImageSelectors.size())
+	{
 		m_ProductImageSelectors =		productImageSelectors();
 	}
 
@@ -479,5 +504,69 @@ void ShopPluginBase::onPageLoadingError(const QString strFaultReason)
 	else
 	{
 
+	}
+}
+void ShopPluginBase::loadSelectorsFromXML(const QString & strPluginName)
+{
+	QDomDocument doc;
+	QFile file(QString("plugins/")+strPluginName);
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+	if (!doc.setContent(&file)) {
+		file.close();
+		return;
+	}
+	file.close();
+	QDomElement mainDocElem = doc.documentElement();
+	QDomNode singleSelectorNode = mainDocElem.firstChild();
+	while(!singleSelectorNode.isNull()) 
+	{
+		QString nodeName = singleSelectorNode.nodeName();
+		QDomElement e = singleSelectorNode.toElement(); // try to convert the node to an element.
+		QString strTag = e.attribute("tag");
+		QString strAttrName = e.attribute("attrName");
+		QString strAttrValue = e.attribute("attrValue");
+
+		SelectorsList stSelectorsList;
+		stSelectorsList.push_back(strTag);
+		stSelectorsList.push_back(strAttrName);
+		stSelectorsList.push_back(strAttrValue);
+		if (nodeName=="SINGLE_PRODUCT_PAGE")
+		{
+			m_ProductPageSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_PRICE_CARD")
+		{
+			m_PriceProductCardSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_PRICE")
+		{
+			m_PriceProductSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_SEARCH_LIST_TEST")
+		{
+			m_SearchPageSelectors =	stSelectorsList;
+		}
+		else if (nodeName=="SINGLE_ENTRY_ON_PRODUCT_SEARCH_LIST")
+		{
+			m_SearchPageProduktSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_NOT_FOUND")
+		{
+			m_NotFoundPageSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_SEARCH_LIST_NEXT_PAGE")
+		{
+			m_NextSearchPageSelectors = stSelectorsList;
+		}
+		else if (nodeName=="PRODUCT_IMAGE")
+		{
+			m_ProductImageSelectors = stSelectorsList;
+		}
+		else if (nodeName=="REFRESH_PAGE")
+		{
+			m_RefreshPageSelectors = stSelectorsList;
+		}
+		singleSelectorNode = singleSelectorNode.nextSibling();
 	}
 }

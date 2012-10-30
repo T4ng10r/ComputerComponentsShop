@@ -56,21 +56,20 @@ int main(int argc, char *argv[])
 	//	//	return -1;  
 	//}
 
-
-	//CKomputronikParserTest cKomputronikParserTest;
-	//if (QTest::qExec(&cKomputronikParserTest, argc, argv)==0)
-	//{
-	//	//CKomputronikPluginTest cKomputronikPluginTest;
-	//	//if (QTest::qExec(&cKomputronikPluginTest, argc, argv)!=0)
-	//	//	return -1;  
-	//}
-
-	CArestParserTest cArestParserTest;
-	if (QTest::qExec(&cArestParserTest, argc, argv)==0)
+	CKomputronikParserTest cKomputronikParserTest;
+	if (QTest::qExec(&cKomputronikParserTest, argc, argv)==0)
 	{
-		CArestPluginTest cArestPluginTest; 
-		if (QTest::qExec(&cArestPluginTest, argc, argv)!=0)
+		CKomputronikPluginTest cKomputronikPluginTest;
+		if (QTest::qExec(&cKomputronikPluginTest, argc, argv)!=0)
 			return -1;  
 	}
+
+	//CArestParserTest cArestParserTest;
+	//if (QTest::qExec(&cArestParserTest, argc, argv)==0)
+	//{
+	//	CArestPluginTest cArestPluginTest; 
+	//	if (QTest::qExec(&cArestPluginTest, argc, argv)!=0)
+	//		return -1;  
+	//}
 		
 }
