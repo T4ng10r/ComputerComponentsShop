@@ -2,14 +2,9 @@
 #include <Data/CDataThread.h>
 #include <Data/Enumerations.h>
 #include <Data/ComputerConfModel.h>
-
+#include <tools/loggers.h>
 #include <list>
 
-void printSlotsConnectionLog(const QString & strLog);
-void printInfoLog(const QString &strLog);
-void printDebugLog(const QString & strLog);
-void printErrorLog(const QString & strLog);
-void printWarnLog(const QString & strLog);
 
 #define LOG_REFRESHING
 
@@ -19,7 +14,7 @@ static void logConnection(QString strConnDesc,bool bResult)
 {
 	QString strDebug = "Connection "+strConnDesc;
 	if (bResult)	strDebug+=" SUCCESS";	else	strDebug+=" FAIL";
-	printSlotsConnectionLog(strDebug);
+	printLog(eDebugLogLevel,eSlots,strDebug);
 	Q_ASSERT_X(bResult==true,"CDataThread::setConnections",QString("Connect %1").arg(strConnDesc).toAscii());
 }
 //////////////////////////////////////////////////////////////////////////
@@ -98,7 +93,7 @@ void CRefreshDataPrivate::prepareNewRefreshing()
 	m_ptrConfigurationModel->resetWorseBestFlags();
 	if (m_vShopCompData.size())
 	{
-		printWarnLog(QString("Components refreshing data from last Refresh run are NOT CLEARED(size=%1)").arg(m_vShopCompData.size()));
+		printLog(eWarningLogLevel,eDebug,QString("Components refreshing data from last Refresh run are NOT CLEARED(size=%1)").arg(m_vShopCompData.size()));
 	}
 	m_vShopCompData.clear();
 	m_bStoppingRefreshing = false;
@@ -142,7 +137,7 @@ void CRefreshDataPrivate::stopProcessComp()
 	}
 	if (m_vShopCompData.size()==0)
 	{
-		printDebugLog(QString("----- Refreshing components DATA FINISHED -----"));
+		printLog(eDebugLogLevel,eDebug,QString("----- Refreshing components DATA FINISHED -----"));
 		emit m_ptrPublic->refreshingFinished();
 	}
 }
@@ -205,7 +200,7 @@ void CRefreshDataPrivate::processComp()
 	}
 	if (m_vShopCompData.size()==0)
 	{
-		printInfoLog(QString("----- Refreshing components DATA FINISHED -----"));
+		printLog(eInfoLogLevel, eDebug, QString("----- Refreshing components DATA FINISHED -----"));
 		emit m_ptrPublic->refreshingFinished();
 	}
 }
@@ -225,7 +220,7 @@ void CRefreshData::onRefreshConf()
 	m_ptrPriv->prepareNewRefreshing();
 	int iColumnCount = m_ptrPriv->m_ptrConfigurationModel->columnCount();
 	int iComponentCount = m_ptrPriv->m_ptrConfigurationModel->rowCount();
-	printInfoLog(QString("----- Refreshing components DATA STARTED -----"));
+	printLog(eInfoLogLevel, eDebug, QString("----- Refreshing components DATA STARTED -----"));
 	for(int iShopIndex=0;iShopIndex<iColumnCount;++iShopIndex)
 	{
 		//deactivated row aren't refreshed
@@ -235,7 +230,7 @@ void CRefreshData::onRefreshConf()
 		std::map<QString, ShopInterface *>::iterator iterFindShop = m_ptrPriv->m_mPluginName2Plugin.find(strShopName);
 		if (iterFindShop == m_ptrPriv->m_mPluginName2Plugin.end())	
 		{
-			printErrorLog(QString("%1:Couldn't find shop plugin for name %2").arg(__FUNCTION__).arg(strShopName));
+			printLog(eErrorLogLevel,eDebug,QString("%1:Couldn't find shop plugin for name %2").arg(__FUNCTION__).arg(strShopName));
 			continue;
 		}
 		if (m_ptrPriv->m_vShopCompData.find(iterFindShop->second)==m_ptrPriv->m_vShopCompData.end())
@@ -244,7 +239,7 @@ void CRefreshData::onRefreshConf()
 			m_ptrPriv->m_vShopCompData[iterFindShop->second]=stSingleShop;
 		}
 #ifdef LOG_REFRESHING
-		printDebugLog(QString("Shop '%1' prepared for refreshing").arg(strShopName));
+		printLog(eDebugLogLevel,eDebug,QString("Shop '%1' prepared for refreshing").arg(strShopName));
 #endif
 		ShopData & stSingleShop = m_ptrPriv->m_vShopCompData[iterFindShop->second];
 		//storing pointer to refresh view item
@@ -266,7 +261,7 @@ void CRefreshData::onRefreshConf()
 			stCompData.strCompUrl = m_ptrPriv->m_ptrConfigurationModel->data(stIndex,Role_CompShopURL).toString().trimmed();
 			stComponentsList[stCompData.strCompName]=stCompData;
 #ifdef LOG_REFRESHING
-			printDebugLog(QString("    Component '%1' (%2,%3) URL='%4'")
+			printLog(eDebugLogLevel,eDebug,QString("    Component '%1' (%2,%3) URL='%4'")
 				.arg(stCompData.strCompName).arg(stCompData.iCol)
 				.arg(stCompData.iRow).arg(stCompData.strCompUrl) );
 #endif
@@ -274,7 +269,7 @@ void CRefreshData::onRefreshConf()
 	}
 	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
-	printInfoLog(QString("----- Refreshing components IN PROGRESS -----"));
+	printLog(eInfoLogLevel, eDebug, QString("----- Refreshing components IN PROGRESS -----"));
 	m_ptrPriv->processComp();
 }
 void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
@@ -282,7 +277,7 @@ void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
 	ShopInterface * iShopPluginFinishedProcessing = qobject_cast<ShopInterface *>(sender());
 	if (m_ptrPriv->m_vShopCompData.find(iShopPluginFinishedProcessing)==m_ptrPriv->m_vShopCompData.end())
 	{
-		printErrorLog(QString("%1:Couldn't find shop plugin for name %2, component %3").arg(__FUNCTION__).arg(iShopPluginFinishedProcessing->shopName())
+		printLog(eErrorLogLevel,eDebug,QString("%1:Couldn't find shop plugin for name %2, component %3").arg(__FUNCTION__).arg(iShopPluginFinishedProcessing->shopName())
 			.arg(stData.strName));
 		return;
 	}
@@ -290,7 +285,7 @@ void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
 	MapOfShopComponents & stComponentsList = stSingleShop.m_Components;
 	if (stComponentsList.find(stData.strName)==stComponentsList.end())
 	{
-		printErrorLog(QString("%1:Not found component '%2'in '%3's components").arg(__FUNCTION__)
+		printLog(eErrorLogLevel,eDebug,QString("%1:Not found component '%2'in '%3's components").arg(__FUNCTION__)
 			.arg(stData.strName).arg(iShopPluginFinishedProcessing->shopName()));
 		return;
 	}
@@ -311,7 +306,7 @@ void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
 	iShopPluginFinishedProcessing->quit();
 	//CompPriceData stData
 	
-	printDebugLog(QString(" -- Component download finished '%1'").arg(stData.strName));
+	printLog(eDebugLogLevel,eDebug,QString(" -- Component download finished '%1'").arg(stData.strName));
 }
 void CRefreshData::onPriceSearchProgress(QString strCompName,ESearchProgress eProgress, int iProgress)
 {
@@ -364,7 +359,7 @@ void CRefreshData::onShopPluginTerminated()
 }
 void CRefreshData::onStopRefreshConf()
 {
-	printDebugLog(QString("STOP refreshing components"));
+	printLog(eDebugLogLevel,eDebug,QString("STOP refreshing components"));
 	m_ptrPriv->m_bStoppingRefreshing = true;
 	m_ptrPriv->stopProcessComp();
 }

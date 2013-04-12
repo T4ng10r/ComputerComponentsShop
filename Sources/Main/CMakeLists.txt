@@ -6,10 +6,8 @@ project(ComputerConfShop)
 find_package(Qt4 REQUIRED QtNetwork QtGui QtCore QtXml QtTest)
 include(${QT_USE_FILE})
 
-IF (Boost_FOUND)
-  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-  ADD_DEFINITIONS( "-DHAS_BOOST" )
-ENDIF(Boost_FOUND)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
 IF (COMPCONF_FROZEN_COLUMN)
@@ -21,11 +19,17 @@ ENDIF (COMPCONF_FROZEN_ROW)
 
 	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	include_directories(${log4qt_SOURCE_DIR})
 
+    SET ( SOURCES_TOOLS
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Tools/loggers.h 	
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Tools/qtTools.h 	
+		)
     SET ( SOURCES_OTHER
         main.cpp
-        loggers.cpp
+        ${SOURCES_TOOLS}
 		  )
+		  
     SET ( SOURCES_DATA_MODELS
 		Data/ComputerConfModel.cpp
 		Data/ComputerConfModel.h
@@ -98,6 +102,7 @@ IF (WIN32)
     SOURCE_GROUP(GUI\\View FILES ${SOURCES_GUI_VIEW})
     SOURCE_GROUP(moc FILES ${SOURCES_MOC})
     SOURCE_GROUP(Plugins FILES ${SOURCES_PLUGINS})
+    SOURCE_GROUP(tools FILES ${SOURCES_TOOLS})
 ENDIF (WIN32)
     
 IF (WIN32)
@@ -109,37 +114,11 @@ ELSE (WIN32)
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         ${SOURCES_RCC} ${SOURCES_DATA_MODELS} main.cpp TODO.txt )
 ENDIF (WIN32)
-	add_dependencies(ComputerConfShop ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
 
     add_library(ComputerConfShop_lib STATIC ${SOURCES_DATA} ${SOURCES_MOC} 
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         main.cpp ${SOURCES_RCC} ${SOURCES_DATA_MODELS})
         
-	add_dependencies(ComputerConfShop_lib ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
-
-	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin)
-	addLoggerLibrariesDependencies(ComputerConfShop ${LIBRARIES_LIST})
-	addLoggerLibrariesDependencies(ComputerConfShop_lib ${LIBRARIES_LIST})
-
-#    IF (COMP_CONF_USE_LOG4QT)
-#	  add_definitions(-DUSE_LOG4QT)
-#	  add_dependencies(ComputerConfShop ${LOG4QT_LIBRARY_NAME})
-#	  add_dependencies(ComputerConfShop_lib ${LOG4QT_LIBRARY_NAME})
- #     target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
-  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4QT_LIBRARY_NAME} )
-   # ELSEIF (COMP_CONF_USE_LOG4CPP)
-#	  add_definitions(-DUSE_LOG4CPP)
-#	  add_dependencies(ComputerConfShop ${LOG4CPP_LIBRARY_NAME})
-#	  add_dependencies(ComputerConfShop_lib ${LOG4CPP_LIBRARY_NAME})
- #     target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
-  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES} ${LOG4CPP_LIBRARY_NAME} )
-#	ELSEIF (COMP_CONF_USE_BOOST_LOG)
-#		target_link_libraries(ComputerConfShop ${QT_LIBRARIES} )
-#		target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES} )
-#		add_definitions(-DUSE_BOOSTLOG)
- #   ELSE (COMP_CONF_USE_LOG4QT)
-  #    target_link_libraries(ComputerConfShop ${QT_LIBRARIES}  )    
-   #   target_link_libraries(ComputerConfShop_lib ${QT_LIBRARIES}  )    
-#    ENDIF (COMP_CONF_USE_LOG4QT)
-
-
+	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin Tools_Lib)
+  	addLoggerLibrariesDependencies(ComputerConfShop LIBRARIES_LIST)
+	addLoggerLibrariesDependencies(ComputerConfShop_lib LIBRARIES_LIST)

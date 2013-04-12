@@ -5,10 +5,7 @@
 #include <iostream>
 #include <QtCore/QtDebug>
 #include <QtCore/QDir>
-
-void printDebugLog(const QString & strLog);
-void printErrorLog(const QString & strLog);
-
+#include <tools/loggers.h>
 
 class ComputerConfXMLReaderPrivate : public QXmlDefaultHandler
 {
@@ -144,21 +141,21 @@ bool ComputerConfXMLReader::loadXMLFile( QString strPath,CComputerConfModel * pt
 	reader.setContentHandler(m_ptrPriv);
 	reader.setErrorHandler(m_ptrPriv);  
 	m_ptrPriv->m_ptrModel = ptrModel;
-	printDebugLog(QString("Start loading saved configuration"));
+	printLog(eDebugLogLevel,eDebug,QString("Start loading saved configuration"));
 
 	QFile file(strPath);
 	if (!file.open(QIODevice::ReadOnly))
 	{
-		printErrorLog(QString("Error during file opening (%1): %2").arg(strPath).arg(file.errorString()));
+		printLog(eErrorLogLevel,eDebug,QString("Error during file opening (%1): %2").arg(strPath).arg(file.errorString()));
 		return false;
 	}
 	QXmlInputSource xmlInputSource(&file);
 
 	if (!reader.parse(&xmlInputSource)) {
-		printErrorLog(QString("Parse failed during %1  parsing. (%2)").arg(strPath).arg(reader.errorHandler()->errorString().toLatin1().data()));
+		printLog(eErrorLogLevel,eDebug,QString("Parse failed during %1  parsing. (%2)").arg(strPath).arg(reader.errorHandler()->errorString().toLatin1().data()));
 		return false;
 	}
-	printDebugLog(QString("Configuration loading finished. Shops: %1, Components: %2").arg(m_ptrPriv->iShopCounts).arg(m_ptrPriv->iComponentsCounts));
+	printLog(eDebugLogLevel,eDebug,QString("Configuration loading finished. Shops: %1, Components: %2").arg(m_ptrPriv->iShopCounts).arg(m_ptrPriv->iComponentsCounts));
 	return true;
 }
 void ComputerConfXMLReader::saveXMLFile(QString strPath,CComputerConfModel * ptrModel)

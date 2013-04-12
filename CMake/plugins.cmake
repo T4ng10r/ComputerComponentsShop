@@ -22,7 +22,7 @@ function(AddPluginSharedLibrary PluginName SourceFilesList MocHeadersList
 	ENDIF(WIN32)
 
 	add_definitions(${QT_DEFINITIONS})
-  SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface tidy_lib)
+	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface tidy_lib Tools_Lib)
   if (${bCreateStaticLib})
     add_library(${PluginName}Plugin_TestLib STATIC ${PLUGIN_SRC} ${PLUGIN_MOC}
         ${PLUGIN_RCC} ${PLUGIN_EXTRA} ${${PluginName}_MOC} ${PLUGIN_EXTRA})
@@ -93,13 +93,11 @@ function(addLoggerLibrariesDependencies LibraryName OtherLibraries)
   IF (Logger STREQUAL "log4Qt")
     add_definitions(-DUSE_LOG4QT)
     SET(LOGGER_LIBRARY ${LOG4QT_LIBRARY_NAME})
-  ELSEIF (Logger STREQUAL "log4Cpp")
-    add_definitions(-DUSE_LOG4CPP)
-    SET(LOGGER_LIBRARY ${LOG4CPP_LIBRARY_NAME})
   ELSE (Logger STREQUAL "log4Qt")
     SET(LOGGER_LIBRARY "")
   ENDIF (Logger STREQUAL "log4Qt")
 
+  #message(STATUS "AddLoggersLibs for '" ${LibraryName} "' are :" ${${OtherLibraries}} )
   target_link_libraries(${LibraryName} ${${OtherLibraries}} ${LOGGER_LIBRARY})
   add_dependencies(${LibraryName} ${LOGGER_LIBRARY} ${${OtherLibraries}})
 endfunction(addLoggerLibrariesDependencies)

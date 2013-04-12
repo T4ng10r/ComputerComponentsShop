@@ -2,6 +2,7 @@
 #include <GUI/MainWindow.h>
 
 #include <QtGui/QTreeView>
+#include <Tools/loggers.h>
 
 int main(int argc, char *argv[])
 {
@@ -10,19 +11,13 @@ int main(int argc, char *argv[])
 	  app.setApplicationName("ComputerConfigurationPriceChecker");
 	  app.setOrganizationName("T4ng10r");
 
-#ifdef USE_LOG4QT
-	  void createLoggers();
 	  createLoggers();
-#endif
       MainWindow * ptMainWindow = new MainWindow;
       ptMainWindow->show();
 
 	  //////////////////////////////////////////////////////////////////////////
 	  int iReturn = app.exec();
 	  delete ptMainWindow;
-#ifdef USE_LOG4QT
-	  void destroyLoggers();
 	  destroyLoggers();
-#endif
 	  return iReturn;
 }

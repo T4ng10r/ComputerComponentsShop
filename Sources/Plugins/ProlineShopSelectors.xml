@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SELECTORS>
-    <SINGLE_PRODUCT_PAGE tag="a" attrName="name" attrValue="topprodid"/>
-    <PRODUCT_PRICE_CARD tag="div" attrName="class" attrValue="cena_karta"/>
-    <PRODUCT_PRICE tag="b" attrName="class" attrValue="cena_b"/>
-    <PRODUCT_SEARCH_LIST_TEST tag="a" attrName="name" attrValue="cennik"/>
-    <SINGLE_ENTRY_ON_PRODUCT_SEARCH_LIST tag="a" attrName="class" attrValue="produkt"/>
-    <PRODUCT_NOT_FOUND tag="div" attrName="class" attrValue="brak-wynikow"/>
-    <PRODUCT_SEARCH_LIST_NEXT_PAGE tag="" attrName="" attrValue=""/>
-    <PRODUCT_IMAGE tag="img" attrName="name" attrValue="foto_pic"/>
-    <REFRESH_PAGE tag="meta" attrName="http-equiv" attrValue="refresh"/>
-</SELECTORS>
+<selectors>
+	<single_product_page>
+		<tag>a</tag>
+		<attrName>name</attrName>
+		<attrValue>topprodid</attrValue>
+	</single_product_page>
+	<product_price_card>
+		<tag>div</tag>
+		<attrName>class</attrName>
+		<attrvalue>cena_karta</attrvalue>
+	</product_price_card>
+	<product_price>
+		<tag>b</tag>
+		<attrName>class</attrName>
+		<attrValue>cena_b</attrValue>
+	</product_price>
+	<product_search_list_test>
+		<tag>a</tag>
+		<attrName>name</attrName>
+		<attrValue>cennik</attrValue>
+	</product_search_list_test>
+	<single_entry_on_product_search_list>
+		<tag>a</tag>
+		<attrName>class</attrName>
+		<attrValue>produkt</attrValue>
+	</single_entry_on_product_search_list>
+	<product_not_found>
+		<tag>div</tag>
+		<attrName>class</attrName>
+		<attrValue>brak-wynikow</attrValue>
+	</product_not_found>
+	<product_search_list_next_page>
+		<tag/>
+		<attrName/>
+		<attrValue/>
+	</product_search_list_next_page>
+	<product_image>
+		<tag>img</tag>
+		<attrName>name</attrName>
+		<attrValue>foto_pic</attrValue>
+	</product_image>
+	<refresh_page>
+		<tag>meta</tag>
+		<attrName>http-equiv</attrName>
+		<attrValue>refresh</attrValue>
+	</refresh_page>
+</selectors>
 

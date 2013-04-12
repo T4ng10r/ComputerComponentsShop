@@ -10,12 +10,12 @@ const QString cstrHomePage("http://www.arest.pl/");
 const QString cstrSearchPrefix("http://www.arest.pl/szukaj/%1//");
 
 int giProgress=1;
-namespace ShopPluginLoggers
-{
-	void createLoggers(const QString & strName);
-	void printErrorLog(const QString & strLog);
-	void printDebugLog(const QString & strLog);
-}
+//namespace ShopPluginLoggers
+//{
+//	void createLoggers(const QString & strName);
+//	void printErrorLog(const QString & strLog);
+//	void printDebugLog(const QString & strLog);
+//}
 
 namespace Arest
 {
@@ -33,7 +33,7 @@ namespace Arest
 
 ArestShopPlugin::ArestShopPlugin()
 {
-	ShopPluginLoggers::createLoggers(shopName());
+	createLoggers(shopName());
 }
 ArestShopPlugin::~ArestShopPlugin(){}
 QString ArestShopPlugin::pluginName() const

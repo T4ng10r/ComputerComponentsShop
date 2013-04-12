@@ -17,11 +17,7 @@
 #include <QtCore/QSettings>
 
 #include <list>
-
-void printSlotsConnectionLog(const QString & strLog);
-void printDebugLog(const QString & strLog);
-void printErrorLog(const QString & strLog);
-void printInfoLog(const QString &strLog);
+#include <tools/loggers.h>
 
 CDataThread* CDataThread::pInstance_=0;
 const QString cstrConfFile("ComputerConfShop.xml");
@@ -67,11 +63,11 @@ CDataThreadPrivate::CDataThreadPrivate(CDataThread * ptrPublic):m_ptrPublic(ptrP
 }
 CDataThreadPrivate::~CDataThreadPrivate()
 {
-	printDebugLog(QString("Enter %1").arg(__FUNCTION__));
+	printLog(eDebugLogLevel,eDebug,QString("Enter %1").arg(__FUNCTION__));
 	delete m_ptrConfigurationModel;
 	delete m_ptrRefreshModel;
 	delete m_ptrConfReader;
-	printDebugLog(QString("Leave %1").arg(__FUNCTION__));
+	printLog(eDebugLogLevel,eDebug,QString("Leave %1").arg(__FUNCTION__));
 }
 void CDataThreadPrivate::loadPlugins()
 {
@@ -102,12 +98,12 @@ void CDataThreadPrivate::loadPlugins()
 				m_ptrPlugins.push_back(iShop);
 				//m_mPluginName2Plugin[iShop->shopName()]=iShop;
 				QString strLog(QString("Plugin '%1' loaded").arg(iShop->pluginName()));
-				printInfoLog(strLog);
+				printLog(eInfoLogLevel, eDebug, strLog);
 			}
 		}
 	}
 	QString strLog(QString("Plugins loading finished (%1 loaded)").arg(m_ptrPlugins.size()));
-	printInfoLog(strLog);
+	printLog(eInfoLogLevel, eDebug, strLog);
 	for(std::vector<ShopInterface *>::const_iterator iterPlug = m_ptrPlugins.begin();
 		iterPlug != m_ptrPlugins.end();++iterPlug)
 	{
@@ -120,7 +116,7 @@ void CDataThreadPrivate::saveConf(QString strPath)
 	QFile stFile(strPath);
 	if (false==stFile.open(QIODevice::WriteOnly | QIODevice::Truncate /*| QIODevice::Text*/))
 	{
-		printErrorLog(QString("Opening configuration save file '%1' failed").arg(strPath));
+		printLog(eErrorLogLevel,eDebug,QString("Opening configuration save file '%1' failed").arg(strPath));
 		return;
 	}
 	stFile.write(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n").toAscii());
@@ -210,9 +206,9 @@ void CDataThreadPrivate::setCurrentFile(const QString &fileName)
 }
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-CDataThread::CDataThread(void)
+////////////////////////////////////////////////////////////////////////// 
+CDataThread::CDataThread(void):m_ptrPriv(new CDataThreadPrivate(this))
 {
-	m_ptrPriv = new CDataThreadPrivate(this);
 	connect(m_ptrPriv->m_ptrRefreshData,SIGNAL(refreshingFinished()),this,SIGNAL(refreshingFinished()));
 }
 CDataThread* CDataThread::getInstance()
@@ -229,10 +225,9 @@ CDataThread* CDataThread::getInstance()
 }
 CDataThread::~CDataThread(void)
 {
-	printDebugLog(QString("Enter %1").arg(__FUNCTION__));
-	delete m_ptrPriv;
+	printLog(eDebugLogLevel,eDebug,QString("Enter %1").arg(__FUNCTION__));
 	pInstance_ = NULL;
-	printDebugLog(QString("Leave %1").arg(__FUNCTION__));
+	printLog(eDebugLogLevel,eDebug,QString("Leave %1").arg(__FUNCTION__));
 }
 void CDataThread::run()
 {
@@ -306,7 +301,7 @@ void CDataThread::onOpenConf(const QString instrFilename)
 	{
 		if (false==m_ptrPriv->m_ptrConfReader->loadXMLFile(strFilename,m_ptrPriv->m_ptrConfigurationModel))
 		{
-			printErrorLog(QString("Configuration file loading FAILED."));
+			printLog(eErrorLogLevel,eDebug,QString("Configuration file loading FAILED."));
 		}
 		else
 		{

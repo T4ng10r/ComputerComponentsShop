@@ -7,20 +7,14 @@
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkReply>
 #include <QtXml/QXmlAttributes>
+#include <boost/shared_ptr.hpp>
 #include <map>
 #include <set>
 
 #define PRINT_LOADED_PAGE_CONTENT
-//#define USE_WEBKIT
-#ifdef USE_WEBKIT
-#define LOAD_WITH_WEBKIT
-#endif
 #define USE_XML_PARSER
 
 class ShopPluginBasePrivate;
-#ifdef USE_WEBKIT
-class QWebPage;
-#endif
 
 enum EPageLoadingPhase
 {
@@ -31,6 +25,9 @@ enum EPageLoadingPhase
 	PAGETYPE_SEARCH_NEXT_PAGE,
 	PAGETYPE_PRODUCT
 };
+#include <tools/loggers.h>
+#define TIMEOUT_INFO  QString("Timeout")
+#define ERROR_INFO  QString("Timeout")
 
 //CompName, URL
 typedef std::map<QString, QUrl >  SearchResult;
@@ -55,13 +52,9 @@ public:
 	virtual QString getSearchProductPageURL(const QString &strCompName);
 protected slots:
 	void onPageDownloadFinished(const QString &);
-	//void onUpdateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+	void onPageDownloadFinished(const QByteArray &);
 	void onPageLoadingProgress(qint64 bytesRead, qint64 totalBytes);
 	void onPageLoadingError(const QString strFaultReason);
-
-	//void 	onAuthenticationRequired ( QNetworkReply * reply, QAuthenticator * authenticator );
-	//void 	onNetworkAccessibleChanged ( QNetworkAccessManager::NetworkAccessibility accessible );
-	//void 	onProxyAuthenticationRequired ( const QNetworkProxy & proxy, QAuthenticator * authenticator );
 
 protected:
 	void run();
@@ -113,7 +106,6 @@ protected:
 	void loadSelectorsFromXML(const QString & strPluginName);
 	//what to do when page will be not found
 	void pageNotFound();
-	//virtual void SinglePageFound(){};
 	//////////////////////////////////////////////////////////////////////////
 
 #ifdef USE_XML_PARSER
@@ -127,7 +119,7 @@ protected:
 #endif
 protected:
 	QString					m_strComponentName;
-	ShopPluginBasePrivate *	m_ptrPriv;
+	boost::shared_ptr<ShopPluginBasePrivate> m_ptrPriv;
 	CompPriceData			m_stCompData;
 	//////////////////////////////////////////////////////////////////////////
 	bool					m_bNoResultPage;

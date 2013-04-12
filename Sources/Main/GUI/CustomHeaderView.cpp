@@ -1,9 +1,9 @@
 #include <GUI/CustomHeaderView.h>
 #include <GUI/CustomHeaderViewEntry.h>
 #include <Data/Enumerations.h>
+#include <tools/loggers.h>
 
 const unsigned int ciEntrySeparator(10);
-void printDebugLog(const QString & strLog);
 
 class CCustomHeaderViewPrivate
 {

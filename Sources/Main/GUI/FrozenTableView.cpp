@@ -4,9 +4,7 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QMenu>
 #include <QtGui/QFont>
-
-void printDebugLog(const QString & strLog);
-void printSlotsConnectionLog(const QString & strLog);
+#include <tools/loggers.h>
 
 #include <GUI/ShopHeaderView.h>
 #include <GUI/ComponentHeaderView.h>
@@ -144,7 +142,8 @@ void FrozenTableViewPrivate::logConnection(QString strConnDesc,bool bResult)
 {
 	QString strDebug = "Connection "+strConnDesc;
 	if (bResult)	strDebug+=" SUCCESS";	else	strDebug+=" FAIL";
-	printSlotsConnectionLog(strDebug);
+	printLog(eDebugLogLevel,eSlots,strDebug);
+	//printLog(eDebugLogLevel,eSlots, strDebug);
 	Q_ASSERT_X(bResult==true,"FrozenTableViewPrivate::setConnections",QString("Connect %1").arg(strConnDesc).toAscii());
 }
 void FrozenTableViewPrivate::setConnections()
@@ -286,15 +285,15 @@ void FrozenTableView::scrollTo (const QModelIndex & index, ScrollHint hint){
 
 void FrozenTableView::onSetValue(int ii)
 {
-	printDebugLog(QString("SetValue1: toSetVal(%1) current(%2)").arg(ii)
+	printLog(eDebugLogLevel,eDebug,QString("SetValue1: toSetVal(%1) current(%2)").arg(ii)
 		.arg(m_ptrPriv->frozenTableColumnView->verticalScrollBar()->value())
 		);
 	m_ptrPriv->frozenTableColumnView->verticalScrollBar()->setValue(ii);
-	printDebugLog(QString("SetValue2: toSetVal(%1) current(%2)").arg(ii)
+	printLog(eDebugLogLevel,eDebug,QString("SetValue2: toSetVal(%1) current(%2)").arg(ii)
 		.arg(m_ptrPriv->frozenTableColumnView->verticalScrollBar()->value())
 		);
 	//verticalScrollBar()
-	//printDebugLog(QString("SetValue: val(%1)").arg(ii));
+	//printLog(eDebugLogLevel,eDebug,QString("SetValue: val(%1)").arg(ii));
 }
 void FrozenTableView::onRowsColumnsCountChanged(const QModelIndex & parent, int start, int end)
 {

@@ -7,11 +7,10 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QMenuBar>
 #include <QtCore/QFileInfo>
+#include <Tools/loggers.h>
+#include <Tools/qtTools.h>
 
 const QSize ciSize(700,450);
-
-void printGUICreationLog(const QString & strLog);
-void printSlotsConnectionLog(const QString & strLog);
 
 MainWindow::MainWindow() : QMainWindow(), m_eRefreshingState(E_RS_READY_TO_REFRESH)
 {
@@ -88,13 +87,13 @@ void MainWindow::setupUI()
 
 	statusBar()->show();
 }
-void MainWindow::logConnection(QString strConnDesc,bool bResult)
-{
-	QString strDebug = "Connection "+strConnDesc;
-	if (bResult)	strDebug+=" SUCCESS";	else	strDebug+=" FAIL";
-	printSlotsConnectionLog(strDebug);
-	Q_ASSERT_X(bResult==true,"MainWindow::setConnections",QString("Connect %1").arg(strConnDesc).toAscii());
-}
+//void MainWindow::logConnection(QString strConnDesc,bool bResult)
+//{
+//	QString strDebug = "Connection "+strConnDesc;
+//	if (bResult)	strDebug+=" SUCCESS";	else	strDebug+=" FAIL";
+//	printLog(eDebugLogLevel,eSlots,strDebug);
+//	Q_ASSERT_X(bResult==true,"MainWindow::setConnections",QString("Connect %1").arg(strConnDesc).toAscii());
+//}
 void MainWindow::setConnections()
 {
 	bool bResult = false;
@@ -110,87 +109,50 @@ void MainWindow::setConnections()
 	bResult = connect(m_ptrStatusBarSignalMapper, SIGNAL(mapped(const QString &)), this, SLOT(onStatusBarMsgChange(const QString &)));
 
 
-	bResult = connect(m_actionNewConf, SIGNAL(triggered(bool)) ,
-		CDataThread::getInstance(), SLOT(onNewConf()));
-	QString strConnDesc = "'m_actionNewConf::toggled' with 'CDataThread::onNewConf'";
-	logConnection(strConnDesc,bResult);
-
-	bResult = connect(m_actionRefreshConf, SIGNAL(triggered(bool)) ,
-		this, SLOT(onRefreshConf()));
-	strConnDesc = "'m_actionRefreshConf::toggled' with 'this::onRefreshConf'";
-	logConnection(strConnDesc,bResult);
-
-	bResult = connect(CDataThread::getInstance(), SIGNAL(refreshingFinished()) ,
-		this, SLOT(onRefreshingFinished()));
-	strConnDesc = "'CDataThread::getInstance::refreshingFinished' with 'this::onRefreshingFinished'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(m_actionNewConf, SIGNAL(triggered(bool)), CDataThread::getInstance(), SLOT(onNewConf()));
+	logConnection("MainWindow::setConnections","'m_actionNewConf::triggered' with 'CDataThread::onNewConf'", bResult);
+	bResult = connect(m_actionRefreshConf, SIGNAL(triggered(bool)) ,this, SLOT(onRefreshConf()));
+	logConnection("MainWindow::setConnections","'m_actionRefreshConf::triggered' with 'this::onRefreshConf'", bResult);
+	bResult = connect(CDataThread::getInstance(), SIGNAL(refreshingFinished()), this, SLOT(onRefreshingFinished()));
+	logConnection("MainWindow::setConnections","'CDataThread::getInstance::refreshingFinished' with 'this::onRefreshingFinished'", bResult);
 	/////
-
-	bResult = connect(m_actionOpenConf, SIGNAL(triggered(bool)),
-		CDataThread::getInstance(), SLOT(onOpenConf()));
-	strConnDesc = "'m_actionOpenConf::toggled' with 'CDataThread::onOpenConf'";
-	logConnection(strConnDesc,bResult);
-
-	bResult = connect(m_actionSaveConf, SIGNAL(triggered(bool)),
-		CDataThread::getInstance(), SLOT(onSaveConf()));
-	strConnDesc = "'m_actionSaveConf::toggled' with 'CDataThread::onSaveConf'";
-	logConnection(strConnDesc,bResult);
-
-	bResult = connect(m_actionSaveAsConf, SIGNAL(triggered(bool)),
-		CDataThread::getInstance(), SLOT(onSaveAsConf()));
-	strConnDesc = "'m_actionSaveAsConf::toggled' with 'CDataThread::onSaveAsConf'";
-	logConnection(strConnDesc,bResult);
-
-	bResult = connect(m_actionProxySettings, SIGNAL(triggered(bool)) ,
-		this, SLOT(onProxySettings(bool)));
-	strConnDesc = "'m_actionProxySettings::toggled' with 'this::onProxySettings'";
-	logConnection(strConnDesc,bResult);
-
+	bResult = connect(m_actionOpenConf, SIGNAL(triggered(bool)), CDataThread::getInstance(), SLOT(onOpenConf()));
+	logConnection("MainWindow::setConnections","'m_actionOpenConf::toggled' with 'CDataThread::onOpenConf'", bResult);
+	bResult = connect(m_actionSaveConf, SIGNAL(triggered(bool)), CDataThread::getInstance(), SLOT(onSaveConf()));
+	logConnection("MainWindow::setConnections","'m_actionSaveConf::toggled' with 'CDataThread::onSaveConf'", bResult);
+	bResult = connect(m_actionSaveAsConf, SIGNAL(triggered(bool)), CDataThread::getInstance(), SLOT(onSaveAsConf()));
+	logConnection("MainWindow::setConnections","'m_actionSaveAsConf::toggled' with 'CDataThread::onSaveAsConf'", bResult);
+	bResult = connect(m_actionProxySettings, SIGNAL(triggered(bool)) ,this, SLOT(onProxySettings(bool)));
+	logConnection("MainWindow::setConnections","'m_actionProxySettings::toggled' with 'this::onProxySettings'", bResult);
 	//////////////////////////////////////////////////////////////////////////
-	bResult = connect(m_ptrAddComp, SIGNAL(clicked(bool)) ,
-		CDataThread::getInstance(), SLOT(onAddComp()));
-	strConnDesc = "'m_ptrAddComp::clicked' with 'CDataThread::onAddComp'";
-	logConnection(strConnDesc,bResult);
-	
-	bResult = connect(m_ptrAddShop, SIGNAL(clicked(bool)) ,
-		CDataThread::getInstance(), SLOT(onAddShop()));
-	strConnDesc = "'m_ptrAddShop::clicked' with 'CDataThread::onAddShop'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(m_ptrAddComp, SIGNAL(clicked(bool)), CDataThread::getInstance(), SLOT(onAddComp()));
+	logConnection("MainWindow::setConnections","'m_ptrAddComp::clicked' with 'CDataThread::onAddComp'", bResult);
+	bResult = connect(m_ptrAddShop, SIGNAL(clicked(bool)), CDataThread::getInstance(), SLOT(onAddShop()));
+	logConnection("MainWindow::setConnections","'m_ptrAddShop::clicked' with 'CDataThread::onAddShop'", bResult);
 	//////////////////////////////////////////////////////////////////////////
-	bResult = connect(m_ptCompConfView, SIGNAL(removeShop(int)) ,
-		CDataThread::getInstance(), SLOT(onRemShop(int)));
-	strConnDesc = "'m_ptCompConfView::removeShop' with 'CDataThread::onRemShop'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(m_ptCompConfView, SIGNAL(removeShop(int)), CDataThread::getInstance(), SLOT(onRemShop(int)));
+	logConnection("MainWindow::setConnections","'m_ptCompConfView::removeShop' with 'CDataThread::onRemShop'", bResult);
 	//////////////////////////////////////////////////////////////////////////
-	bResult = connect(m_ptCompConfView, SIGNAL(removeComponent(int)) ,
-		CDataThread::getInstance(), SLOT(onRemComp(int)));
-	strConnDesc = "'m_ptCompConfView::removeComponent' with 'CDataThread::onRemComp'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(m_ptCompConfView, SIGNAL(removeComponent(int)), CDataThread::getInstance(), SLOT(onRemComp(int)));
+	logConnection("MainWindow::setConnections","'m_ptCompConfView::removeComponent' with 'CDataThread::onRemComp'", bResult);
 	////////////////////////////////////////////////////////////////////////////
 	bResult = connect(m_ptCompConfView, SIGNAL(onOpenLink(QModelIndex)) ,
 		CDataThread::getInstance(), SLOT(onOpenLinkInExternalBrowser(QModelIndex)));
-	strConnDesc = "'m_ptCompConfView::onOpenLink' with 'CDataThread::onOpenLinkInExternalBrowser'";
-	logConnection(strConnDesc,bResult);
+	logConnection("MainWindow::setConnections","'m_ptCompConfView::onOpenLink' with 'CDataThread::onOpenLinkInExternalBrowser'", bResult);
 	////////////////////////////////////////////////////////////////////////////
-	bResult = connect(m_ptCompConfView, SIGNAL(onOpenSearchPage(QModelIndex)) ,
-		CDataThread::getInstance(), SLOT(onOpenSearchInExternalBrowser(QModelIndex)));
-	strConnDesc = "'m_ptCompConfView::onOpenSearchPage' with 'CDataThread::onOpenSerachInExternalBrowser'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(m_ptCompConfView, SIGNAL(onOpenSearchPage(QModelIndex)), CDataThread::getInstance(), SLOT(onOpenSearchInExternalBrowser(QModelIndex)));
+	logConnection("MainWindow::setConnections","'m_ptCompConfView::onOpenSearchPage' with 'CDataThread::onOpenSerachInExternalBrowser'", bResult);
 	////////////////////////////////////////////////////////////////////////////
 	bResult = connect(m_ptCompConfView, SIGNAL(resetFieldCache(QModelIndex)) ,
 		CDataThread::getInstance(), SLOT(onResetFieldCache(QModelIndex)));
-	strConnDesc = "'m_ptCompConfView::onOpenSearchPage' with 'CDataThread::onOpenSerachInExternalBrowser'";
-	logConnection(strConnDesc,bResult);
+	logConnection("MainWindow::setConnections","'m_ptCompConfView::onOpenSearchPage' with 'CDataThread::onOpenSerachInExternalBrowser'", bResult);
 	////////////////////////////////////////////////////////////////////////////
 	bResult = connect(CDataThread::getInstance(), SIGNAL(onStatusBarMsg(const QString & )) ,
 		this , SLOT(onStatusBarMsgChange(const QString &)));
-	strConnDesc = "'CDataThread::getInstance()::onStatusBarMsg' with 'this::onStatusBarMsgChange'";
-	logConnection(strConnDesc,bResult);
+	logConnection("MainWindow::setConnections","'CDataThread::getInstance()::onStatusBarMsg' with 'this::onStatusBarMsgChange'", bResult);
 	////////////////////////////////////////////////////////////////////////////
-	bResult = connect(CDataThread::getInstance(), SIGNAL(updateRecentFilesAction(const QStringList &)) ,
-		this , SLOT(onUpdateRecentFileActions(const QStringList &)));
-	strConnDesc = "'CDataThread::getInstance()::updateRecentFilesAction' with 'this::onUpdateRecentFileActions'";
-	logConnection(strConnDesc,bResult);
+	bResult = connect(CDataThread::getInstance(), SIGNAL(updateRecentFilesAction(const QStringList &)), this , SLOT(onUpdateRecentFileActions(const QStringList &)));
+	logConnection("MainWindow::setConnections","'CDataThread::getInstance()::updateRecentFilesAction' with 'this::onUpdateRecentFileActions'", bResult);
 }
 void MainWindow::setupActions()
 {

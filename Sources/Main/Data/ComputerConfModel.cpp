@@ -106,6 +106,7 @@ public:
 	QIcon				cBestIcon;
 	QIcon				cWorstIcon;
 	QIcon				cSearchingIcon;
+	QIcon				cTimeoutIcon;
 };
 
 CComputerConfModelPrivate::CComputerConfModelPrivate(CComputerConfModel * ptrPublic)
@@ -120,6 +121,7 @@ CComputerConfModelPrivate::CComputerConfModelPrivate(CComputerConfModel * ptrPub
 	cBestIcon = QIcon(":/images/good.png");
 	cWorstIcon = QIcon(":/images/worst.png");
 	cSearchingIcon = QIcon(":/images/search.png");
+	cTimeoutIcon = QIcon(":/images/clock.png");
 
 	QPalette stPalette(QApplication::palette());
 	ccDisableColor = stPalette.color(QPalette::Disabled,QPalette::Base);
@@ -370,6 +372,8 @@ QVariant CComputerConfModel::data(const QModelIndex &stIndex, int role) const
 				return m_ptrPriv->cBestIcon;
 			if (eEntry.bWorsePrice)
 				return m_ptrPriv->cWorstIcon;
+			if (eEntry.eSearchResult==SR_LOADINGTIMEOUT)
+				return m_ptrPriv->cTimeoutIcon;
 			if (eEntry.eSearchResult!=SR_NONE && eEntry.eSearchResult!=SR_COMPFOUND)
 				return m_ptrPriv->cErrorIcon;
 			if (eEntry.bCellIsRefreshing)

@@ -19,12 +19,12 @@ namespace Proline
 	double			dPrice(0);
 }
 
-namespace ShopPluginLoggers
-{
-	void createLoggers(const QString & strName);
-	void printErrorLog(const QString & strLog);
-	void printDebugLog(const QString & strLog);
-}
+//namespace ShopPluginLoggers
+//{
+//	void createLoggers(const QString & strName);
+//	void printErrorLog(const QString & strLog);
+//	void printDebugLog(const QString & strLog);
+//}
 //////////////////////////////////////////////////////////////////////////
 class ProlineShopPlugin::ProlineShopPluginPrivate
 {
@@ -38,7 +38,7 @@ ProlineShopPlugin::ProlineShopPluginPrivate::ProlineShopPluginPrivate()
 //////////////////////////////////////////////////////////////////////////
 ProlineShopPlugin::ProlineShopPlugin()
 {
-	ShopPluginLoggers::createLoggers(shopName());
+	createLoggers(shopName());
 	loadSelectorsFromXML(cstrProlineSelectorsFile);
 }
 ProlineShopPlugin::~ProlineShopPlugin(){}
@@ -164,7 +164,7 @@ void ProlineShopPlugin::parseProductPage()
 	m_stCompData.dPrice = Proline::dPrice;
 	m_stCompData.eSearchResult = SR_COMPFOUND;
 	m_stCompData.strName = m_strComponentName;
-	ShopPluginLoggers::printDebugLog("Product found.");
+	printLog(eDebugLogLevel, eDebug,"Product found.");
 	//////////////////////////////////////////////////////////////////////////
 	//stCompData.strCompURL = getWebPage()->mainFrame()->url().toString();
 	//stResult.insert(mSearchResult.begin(),mSearchResult.end());

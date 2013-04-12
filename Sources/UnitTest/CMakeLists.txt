@@ -5,6 +5,8 @@ project(UnitTest)
 #dodajemy dane dotyczace QT - sciezki, biblioteki
 #find_package(Qt4 COMPONENTS QtCore QtGui QtTest QtNetwork REQUIRED )
 include(${QT_USE_FILE})
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 	include_directories(${ComputerConfShop_SOURCE_DIR})
 	include_directories(${ComputerConfShop_Sources_SOURCE_DIR})
@@ -33,8 +35,8 @@ SET ( SOURCES_TEST_PLUGINS_DATA
 		PluginsTests/CArestParserTest.h
 		PluginsTests/CArestPluginTest.cpp
 		PluginsTests/CArestPluginTest.h
-		PluginsTests/ShopPluginNetworkTest.cpp 
-		PluginsTests/ShopPluginNetworkTest.h
+		PluginsTests/LoadNetworkObjectTest.cpp 
+		PluginsTests/LoadNetworkObjectTest.h
 		PluginsTests/CProlinePluginTest.cpp 
 		PluginsTests/CProlinePluginTest.h 
 		PluginsTests/CProlineParserTest.cpp
@@ -59,7 +61,7 @@ SET ( SOURCES_TEST_MOC
 	PluginsTests/CProlinePluginTest.h 
 	PluginsTests/CKomputronikParserTest.h
 	PluginsTests/CKomputronikPluginTest.h 
-    PluginsTests/ShopPluginNetworkTest.h
+    PluginsTests/LoadNetworkObjectTest.h
     )
 
 QT4_WRAP_CPP(SOURCES_MOC ${SOURCES_TEST_MOC})

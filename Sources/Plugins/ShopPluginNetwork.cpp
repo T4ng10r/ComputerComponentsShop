@@ -8,9 +8,9 @@ const unsigned int ciSinglePageLoadTime(7*ciMilisecondsInSecond);
 
 namespace ShopPluginLoggers
 {
-	void printErrorLog(const QString & strLog);
-	void printDebugLog(const QString & strLog);
+	#include <loggers.h>
 }
+using namespace ShopPluginLoggers;
 
 class ShopPluginNetworkPrivate
 {
@@ -50,7 +50,7 @@ ShopPluginNetwork::~ShopPluginNetwork()
 }
 void ShopPluginNetwork::loadPage(const QString &strUrl)
 {
-	ShopPluginLoggers::printDebugLog(QString("Start HTML page loading (URL='%1')").arg(strUrl));
+	ShopPluginLoggers::printLog(eDebugLogLevel, eDebug, QString("Start HTML page loading (URL='%1')").arg(strUrl));
 	m_ptrPriv->m_strURL = strUrl;
 	loadingPreparation();
 #ifdef LOAD_WITH_WEBKIT
@@ -115,7 +115,7 @@ void ShopPluginNetwork::onPageLoadingTimeout()
 }
 void ShopPluginNetwork::onHttpErrorReply(QNetworkReply::NetworkError errorNbr)
 {
-	ShopPluginLoggers::printErrorLog(QString("HTTP Loading error :'%1' (URL='%2')").arg(errorNbr).arg(m_ptrPriv->m_strURL));
+	ShopPluginLoggers::printLog(eErrorLogLevel, eDebug, QString("HTTP Loading error :'%1' (URL='%2')").arg(errorNbr).arg(m_ptrPriv->m_strURL));
 	emit pageLoadingFailed(ERROR_INFO);
 }
 

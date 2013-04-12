@@ -38,7 +38,7 @@ protected:
 	void setupUI();
 	void setupActions();
 	void setConnections();
-	void logConnection(QString strConnDesc,bool bResult);
+	//void logConnection(QString strConnDesc,bool bResult);
 	void closeEvent(QCloseEvent *);
 	QString strippedName(const QString &fullFileName);
 protected slots:

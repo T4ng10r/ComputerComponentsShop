@@ -2,29 +2,38 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ShopPlugin)
 
-  include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
-  include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy)
-  include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins)
 	include(${QT_USE_FILE})
+	include_directories(${log4qt_SOURCE_DIR})
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include)
+	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/tidy)
+	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins)
+	include_directories(${Boost_INCLUDE_DIR})
 
-	IF (Boost_FOUND)
-		INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-		ADD_DEFINITIONS( "-DHAS_BOOST" )
-	ENDIF(Boost_FOUND)
+	ADD_DEFINITIONS( "-DHAS_BOOST" )
 	
 ################################################################################
 ################################################################################
+	SET ( PLUGIN_INTERFACE_NETWORK_SRC
+		Network/LoadNetworkObject.cpp 
+		Network/LoadNetworkObject.h 
+		Network/LoadNetworkObjectPrivate.h 
+	)
+	SET ( PLUGIN_TOOLS 
+	${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Tools/loggers.h 	
+	${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Tools/qtTools.h 	
+		)
 	SET ( PLUGIN_INTERFACE_SRC
       ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
       ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/CompPriceData.h
 		ShopPluginBase.cpp 
 		ShopPluginBase.h
-		ShopPluginNetwork.cpp
-		ShopPluginNetwork.h 
-		loggers.cpp 
+		ShopPluginBase_p.h
 	)
 	SET ( PLUGIN_INTERFACE_MOC_HEADERS
-      ${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
+		${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins/ShopInterface.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Network/LoadNetworkObject.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Network/LoadNetworkObjectPrivate.h
 		ShopPluginNetwork.h 
 		ShopPluginBase.h
 	)
@@ -33,12 +42,17 @@ project(ShopPlugin)
 	
 IF (WIN32)
 	SOURCE_GROUP(moc FILES ${PLUGIN_INTERFACE_MOC})
+	SOURCE_GROUP(Network FILES ${PLUGIN_INTERFACE_NETWORK_SRC})
+	SOURCE_GROUP(tools FILES ${PLUGIN_TOOLS})
 endif(WIN32)
 
-	add_library(ShopPluginInterface STATIC ${PLUGIN_INTERFACE_SRC} ${PLUGIN_INTERFACE_MOC})
+	add_library(ShopPluginInterface STATIC ${PLUGIN_INTERFACE_SRC} 
+		${PLUGIN_INTERFACE_NETWORK_SRC} ${PLUGIN_TOOLS}
+		${PLUGIN_INTERFACE_MOC} 
+		)
 	SET_TARGET_PROPERTIES(ShopPluginInterface PROPERTIES LINKER_LANGUAGE CXX)
-  SET(LIBRARIES_LIST ${QT_LIBRARIES} tidy_lib)
-  addLoggerLibrariesDependencies(ShopPluginInterface ${LIBRARIES_LIST})
+	SET(LIBRARIES_LIST ${QT_LIBRARIES} tidy_lib Tools_Lib)
+	addLoggerLibrariesDependencies(ShopPluginInterface ${LIBRARIES_LIST})
 
 ################################################################################
 ################################################################################

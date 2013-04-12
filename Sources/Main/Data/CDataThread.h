@@ -1,10 +1,11 @@
 #ifndef _CCS_DATA_THREAD_INCLUDE_
 #define _CCS_DATA_THREAD_INCLUDE_
 #include <QtCore/QThread>
-#include <vector>
+#include <QtGui/QStandardItemModel>
 #include <Plugins/CompPriceData.h>
 #include <Data/ProxySettings.h>
-#include <QtGui/QStandardItemModel>
+#include <boost/scoped_ptr.hpp>
+#include <vector>
 
 class CComputerConfModel;
 class CDataThreadPrivate;
@@ -46,7 +47,7 @@ public slots:
 	void onOpenSearchInExternalBrowser(const QModelIndex & stIndex);
 	void onResetFieldCache(const QModelIndex & stIndex);
 protected:
-	CDataThreadPrivate * m_ptrPriv;
+	boost::scoped_ptr<CDataThreadPrivate> m_ptrPriv;
 	CComputerConfModel * m_ptrModel;
 };
 #endif //_CCS_DATA_THREAD_INCLUDE_

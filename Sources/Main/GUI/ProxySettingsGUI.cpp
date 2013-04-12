@@ -11,9 +11,7 @@
 #include <QtGui/QRegExpValidator>
 #include <QtNetwork/QNetworkProxy>
 #include <Data/CDataThread.h>
-
-void printGUICreationLog(const QString & strLog);
-void printSlotsConnectionLog(const QString & strLog);
+#include <tools/loggers.h>
 
 class IP4Validator : public QValidator {
 public:

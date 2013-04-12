@@ -7,5 +7,6 @@
     <file>images/not_found.png</file>
     <file>images/search.png</file>
     <file>images/worst.png</file>
+    <file>images/clock.png</file>
   </qresource>
 </RCC>

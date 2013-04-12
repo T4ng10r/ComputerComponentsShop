@@ -1,6 +1,7 @@
 #include "CComputerConfModelTest.h"
 #include "CCustomHeadersTest.h"
-#include <PluginsTests/ShopPluginNetworkTest.h>
+
+#include <PluginsTests/LoadNetworkObjectTest.h>
 #include <PluginsTests/CProlineParserTest.h>
 #include <PluginsTests/CProlinePluginTest.h>
 #include <PluginsTests/CKomputronikParserTest.h>
@@ -44,25 +45,27 @@ int main(int argc, char *argv[])
 	if (QTest::qExec(&cCustomHeadersTest, argc, argv)!=0)
 		return -1;  
 	 
-	//ShopPluginNetworkTest   cShopPluginNetworkTest;
-	//if (QTest::qExec(&cShopPluginNetworkTest, argc, argv)!=0)
-	//	return -1;  
+	LoadNetworkObjectTest   cLoadNetworkObjectTest;
+	if (QTest::qExec(&cLoadNetworkObjectTest, argc, argv)!=0)
+		return -1;  
 
-	//CProlineParserTest cProlineParserTest;
-	//if (QTest::qExec(&cProlineParserTest, argc, argv)==0)
-	//{
-	//	CProlinePluginTest cProlinePluginTest; 
-	//	//if (QTest::qExec(&cProlinePluginTest, argc, argv)!=0)
-	//	//	return -1;  
-	//}
+//	ShopPluginBaseTest
 
-	CKomputronikParserTest cKomputronikParserTest;
-	if (QTest::qExec(&cKomputronikParserTest, argc, argv)==0)
+	CProlineParserTest cProlineParserTest;
+	if (QTest::qExec(&cProlineParserTest, argc, argv)==0)
 	{
-		CKomputronikPluginTest cKomputronikPluginTest;
-		if (QTest::qExec(&cKomputronikPluginTest, argc, argv)!=0)
+		CProlinePluginTest cProlinePluginTest; 
+		if (QTest::qExec(&cProlinePluginTest, argc, argv)!=0)
 			return -1;  
 	}
+
+	//CKomputronikParserTest cKomputronikParserTest;
+	//if (QTest::qExec(&cKomputronikParserTest, argc, argv)==0)
+	//{
+	//	CKomputronikPluginTest cKomputronikPluginTest;
+	//	if (QTest::qExec(&cKomputronikPluginTest, argc, argv)!=0)
+	//		return -1;  
+	//}
 
 	//CArestParserTest cArestParserTest;
 	//if (QTest::qExec(&cArestParserTest, argc, argv)==0)
