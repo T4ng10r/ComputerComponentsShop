@@ -4,10 +4,10 @@
 class ShopPluginBaseTest : public ::testing::Test {
 public:
 	virtual void SetUp();
+	void prepareSelectorsMocks();
 protected:
 
 protected:
 	ShopPluginBaseInheriterMock		stShopPluginBase;
-	LoadNetworkObjectMock			stLoadNetworkObjectMock;
-
+	//LoadNetworkObjectMock			stLoadNetworkObjectMock;
 };

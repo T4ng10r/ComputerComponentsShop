@@ -11,6 +11,16 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <map>
 
+enum EPageLoadingPhase
+{
+	PAGETYPE_NONE,
+	PAGETYPE_ERROR,
+	PAGETYPE_PRODUCT_OLD_URL,
+	PAGETYPE_SEARCH,
+	PAGETYPE_SEARCH_NEXT_PAGE,
+	PAGETYPE_PRODUCT
+};
+
 class ShopPluginBase;
 using boost::property_tree::ptree;
 

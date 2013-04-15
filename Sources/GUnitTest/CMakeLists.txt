@@ -26,6 +26,7 @@ SET ( SOURCES_PRODUCTION_CODE
 SET ( SOURCES_MOCKS
 	Mocks/LoadNetworkObjectMock.h 
 	Mocks/ShopPluginBaseInheriterMock.h
+	Mocks/ShopPluginBaseInheriterMock.cpp 
 )
 
 SET ( SOURCES_TEST
@@ -50,6 +51,6 @@ add_executable(GUnitTest ${SOURCES_MAIN} ${SOURCES_MOCKS}
 					${SOURCES_TEST}
 					${SOURCES_PRODUCTION_CODE}
 )
-target_link_libraries(GUnitTest ${QT_LIBRARIES} gmock gtest ShopPluginInterface Tools_Lib)
-add_dependencies(GUnitTest gmock gtest ShopPluginInterface Tools_Lib)
+target_link_libraries(GUnitTest ${QT_LIBRARIES} gmock gtest ShopPluginInterface Tools_Lib tidy_lib)
+add_dependencies(GUnitTest gmock gtest ShopPluginInterface Tools_Lib tidy_lib)
 #add_test(GUnitTest)

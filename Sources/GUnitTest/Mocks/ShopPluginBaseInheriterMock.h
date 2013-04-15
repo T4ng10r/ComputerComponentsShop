@@ -1,4 +1,7 @@
-#include <ShopPluginBase.cpp>
+#ifndef _SHOP_PLUGIN_BASE_MOCK_
+#define _SHOP_PLUGIN_BASE_MOCK_
+#include <ShopPluginBase.h>
+#include "Mocks/LoadNetworkObjectMock.h"
 #include <gmock/gmock.h>
 
 class ShopPluginBaseInheriterMock : public ShopPluginBase
@@ -26,8 +29,4 @@ public:
 public:
 	LoadNetworkObjectMock			stLoadNetworkObjectMock;
 };
-
-ShopPluginBaseInheriterMock::ShopPluginBaseInheriterMock()
-{
-	m_ptrPriv->m_stNetworkObjectLoader = stLoadNetworkObjectMock;
-}
+#endif

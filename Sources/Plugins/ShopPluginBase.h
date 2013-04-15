@@ -16,15 +16,6 @@
 
 class ShopPluginBasePrivate;
 
-enum EPageLoadingPhase
-{
-	PAGETYPE_NONE,
-	PAGETYPE_ERROR,
-	PAGETYPE_PRODUCT_OLD_URL,
-	PAGETYPE_SEARCH,
-	PAGETYPE_SEARCH_NEXT_PAGE,
-	PAGETYPE_PRODUCT
-};
 #include <tools/loggers.h>
 #define TIMEOUT_INFO  QString("Timeout")
 #define ERROR_INFO  QString("Timeout")
@@ -66,8 +57,6 @@ protected:
 	virtual void prepareHTMLParserForNewSearch()=0;
 	//tests if single component with name as parameter fits to searched pattern
 	bool testSingleComponentName(QString strFoundComponentName);
-	EPageLoadingPhase getPageLoadingPhase();
-
 	//////////////////////////////////////////////////////////////////////////
 	virtual QUrl createSearchURL(const QString & strName = QString()) = 0;
 	//creates link to next page with search results, 

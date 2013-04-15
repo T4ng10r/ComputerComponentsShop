@@ -166,10 +166,6 @@ QString	ShopPluginBase::getCurrentlyProcessedComponent() const
 {
 	return m_strComponentName;
 }
-EPageLoadingPhase ShopPluginBase::getPageLoadingPhase()
-{
-	return m_ptrPriv->m_ePageLoadingPhase;
-}
 void ShopPluginBase::run()
 {
 	if (m_ptrPriv->thread()!=this->thread())
