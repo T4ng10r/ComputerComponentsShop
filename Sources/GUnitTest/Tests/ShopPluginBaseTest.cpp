@@ -1,7 +1,11 @@
 #include "Tests/ShopPluginBaseTest.h"
+#include "ShopPluginBase_p.h"
+#include <boost/bind.hpp>
 using ::testing::Return;
 using ::testing::AtLeast; 
 using ::testing::_; 
+using ::testing::Invoke;
+using ::testing::InvokeWithoutArgs;
 
 void ShopPluginBaseTest::SetUp()
 {
@@ -11,8 +15,16 @@ void ShopPluginBaseTest::SetUp()
 		.WillByDefault(Return());
 	ON_CALL(stShopPluginBase, createSearchURL(_))
 		.WillByDefault(Return(QUrl("url")));
-	//QUrl ProlineShopPlugin::createSearchURL(const QString & strName)
+	//reaction to calling LoadNetworkObjectMoc
+
+	
+
 }
+LoadNetworkObjectMock* ShopPluginBaseTest::getShopPluginBaseMock()
+{
+	return (LoadNetworkObjectMock*)stShopPluginBase.m_ptrPriv->m_ptrNetworkObjectLoader.get();
+}
+
 void ShopPluginBaseTest::prepareSelectorsMocks()
 {
 	QString strSelTestPage []={"a","class","test"};
@@ -38,9 +50,6 @@ void ShopPluginBaseTest::prepareSelectorsMocks()
 		.WillByDefault(Return(SelectorsList(strSelNextPage,strSelNextPage+sizeof(strSelNextPage) / sizeof(QString))));
 }
 
-//ShopPluginBaseInheriterMock		stShopPluginBase;
-//LoadNetworkObjectMock			stLoadNetworkObjectMock;
-
 TEST_F(ShopPluginBaseTest, General_test_1)
 {
 	EXPECT_CALL(stShopPluginBase, produktPageTestSelectors()).Times(AtLeast(1));
@@ -53,6 +62,20 @@ TEST_F(ShopPluginBaseTest, General_test_1)
 	EXPECT_CALL(stShopPluginBase, prepareHTMLParserForNewSearch()).Times(AtLeast(1));
 	EXPECT_CALL(stShopPluginBase, createSearchURL(_)).Times(AtLeast(1));
 
+	QByteArray stContent("");
+	ON_CALL(*getShopPluginBaseMock(),loadNetworkObject(_))
+		//.WillByDefault(Invoke(stShopPluginBase,boost::bind(&ShopPluginBase::onPageDownloadFinished,stContent)));
+		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,boost::bind(&ShopPluginBase::onPageDownloadFinished, &stShopPluginBase, stContent)));
+		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,boost::bind(&ShopPluginBaseInheriterMock::call_onPageDownloadFinished, &stShopPluginBase, stContent)));
+		.WillByDefault(Invoke(boost::bind(&ShopPluginBaseInheriterMock::call_onPageDownloadFinished, &stShopPluginBase, stContent)));
+		//.WillByDefault(Invoke(boost::bind(&ShopPluginBaseInheriterMock::onPageDownloadFinished, boost::ref(stShopPluginBase))(stContent)));
+	
+		//.WillByDefault(Invoke(&stShopPluginBase,&ShopPluginBaseInheriterMock::printPageContent)); 
+		//-----//
+		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,&ShopPluginBaseInheriterMock::parseProductPage)); 
+		//this is function without args and return value
+
+	//EXPECT_CALL(stShopPluginBase, createSearchURL(_)).Times(AtLeast(1));
 	stShopPluginBase.getProductData("TestComponent");
 
 	//EXPECT_CALL(turtle, PenDown())              // #3

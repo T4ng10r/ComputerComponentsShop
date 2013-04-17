@@ -4,6 +4,8 @@
 #include "Mocks/LoadNetworkObjectMock.h"
 #include <gmock/gmock.h>
 
+class ShopPluginBaseTest;
+
 class ShopPluginBaseInheriterMock : public ShopPluginBase
 {
 	friend class ShopPluginBaseTest;
@@ -26,6 +28,10 @@ public:
 	MOCK_CONST_METHOD0(shopName, QString());
 	MOCK_CONST_METHOD0(getShopIcon, QIcon());
 	MOCK_CONST_METHOD0(getShopURL, QString());
+	void call_onPageDownloadFinished(const QByteArray & stContent)
+	{
+		onPageDownloadFinished(stContent);
+	};
 public:
 	LoadNetworkObjectMock			stLoadNetworkObjectMock;
 };

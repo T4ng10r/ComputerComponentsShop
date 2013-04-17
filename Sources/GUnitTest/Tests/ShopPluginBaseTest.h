@@ -5,6 +5,7 @@ class ShopPluginBaseTest : public ::testing::Test {
 public:
 	virtual void SetUp();
 	void prepareSelectorsMocks();
+	LoadNetworkObjectMock* getShopPluginBaseMock();
 protected:
 
 protected:

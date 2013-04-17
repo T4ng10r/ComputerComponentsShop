@@ -38,7 +38,8 @@ public:
 public:
 	ShopPluginBase *		m_ptrPublic;
 	//class loading HTML pages
-	LoadNetworkObject		m_stNetworkObjectLoader;
+	boost::shared_ptr<LoadNetworkObject>	m_ptrNetworkObjectLoader;
+	//LoadNetworkObject		m_stNetworkObjectLoader;
 	//////////////////////////////////////////////////////////////////////////
 	EPageLoadingPhase		m_ePageLoadingPhase; 
 	QString					m_strCurrentURL;

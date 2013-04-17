@@ -4,5 +4,5 @@
 
 ShopPluginBaseInheriterMock::ShopPluginBaseInheriterMock()
 {
-	m_ptrPriv->m_stNetworkObjectLoader = stLoadNetworkObjectMock;
+	m_ptrPriv->m_ptrNetworkObjectLoader.reset(new LoadNetworkObjectMock);
 }

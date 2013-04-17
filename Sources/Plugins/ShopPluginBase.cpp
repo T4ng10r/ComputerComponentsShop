@@ -8,7 +8,7 @@ const unsigned int ciWholePluginLoadingTime(30);
 
 ShopPluginBasePrivate::ShopPluginBasePrivate(ShopPluginBase * ptrPublic):
 m_ptrPublic(ptrPublic), m_ePageLoadingPhase(PAGETYPE_NONE),
-m_uCurrentPage(1),m_strCurrentURL("")
+m_uCurrentPage(1),m_strCurrentURL(""),m_ptrNetworkObjectLoader(new LoadNetworkObject)
 {
 #ifdef USE_XML_PARSER
 	m_stXMLInputSource.setData(QString(""));
@@ -16,11 +16,11 @@ m_uCurrentPage(1),m_strCurrentURL("")
 	m_stXMLReader.setErrorHandler(m_ptrPublic);  
 #endif
 	bool bResult(false);
-	bResult = QObject::connect(&m_stNetworkObjectLoader, SIGNAL(netObjectLoadingFinished(const QByteArray &)),	m_ptrPublic, SLOT(onPageDownloadFinished(const QByteArray &)));
+	bResult = QObject::connect(m_ptrNetworkObjectLoader.get(), SIGNAL(netObjectLoadingFinished(const QByteArray &)),	m_ptrPublic, SLOT(onPageDownloadFinished(const QByteArray &)));
 	logConnection("ShopPluginBasePrivate","'m_stNetworkObjectLoader::netObjectLoadingFinished' with 'm_ptrPublic::onPageDownloadFinished'", bResult);
-	bResult = QObject::connect(&m_stNetworkObjectLoader, SIGNAL(netObjectLoadingFailed(const QString)),	m_ptrPublic, SLOT(onPageLoadingError(const QString)));
+	bResult = QObject::connect(m_ptrNetworkObjectLoader.get(), SIGNAL(netObjectLoadingFailed(const QString)),	m_ptrPublic, SLOT(onPageLoadingError(const QString)));
 	logConnection("ShopPluginBasePrivate","'m_stNetworkObjectLoader::netObjectLoadingFailed' with 'm_ptrPublic::onPageLoadingError'", bResult);
-	bResult = QObject::connect(&m_stNetworkObjectLoader, SIGNAL(netObjectLoadingProgress(qint64, qint64)),	m_ptrPublic, SLOT(onPageLoadingProgress(qint64, qint64)));
+	bResult = QObject::connect(m_ptrNetworkObjectLoader.get(), SIGNAL(netObjectLoadingProgress(qint64, qint64)),	m_ptrPublic, SLOT(onPageLoadingProgress(qint64, qint64)));
 	logConnection("ShopPluginBasePrivate","'m_stNetworkObjectLoader::netObjectLoadingProgress' with 'm_ptrPublic::onPageLoadingProgress'", bResult);
 }
 void ShopPluginBasePrivate::loadNextPage()
@@ -28,7 +28,7 @@ void ShopPluginBasePrivate::loadNextPage()
 	m_ePageLoadingPhase = PAGETYPE_SEARCH_NEXT_PAGE;
 	++m_uCurrentPage;
 	QUrl stUrl = m_ptrPublic->createSearchNextPageURL(m_uCurrentPage);
-	m_stNetworkObjectLoader.loadNetworkObject(stUrl.toString());
+	m_ptrNetworkObjectLoader->loadNetworkObject(stUrl.toString());
 }
 void ShopPluginBasePrivate::processSearchPageLoad()
 {
@@ -80,7 +80,7 @@ void ShopPluginBasePrivate::processSearchPageLoad()
 	m_ePageLoadingPhase = PAGETYPE_PRODUCT;
 	m_ptrPublic->m_stCompData.strCompURL =stUrl.toString();
 	m_strCurrentURL = stUrl.toString();
-	m_stNetworkObjectLoader.loadNetworkObject(stUrl.toString());
+	m_ptrNetworkObjectLoader->loadNetworkObject(stUrl.toString());
 }
 void ShopPluginBasePrivate::processProductPageLoad()
 {
@@ -283,7 +283,7 @@ void ShopPluginBase::getProductData(const QString &strCompName, const QString & 
 	}
 	++(m_ptrPriv->m_iProcessingPhase);
 	m_ptrPriv->m_strCurrentURL = stUrl.toString();
-	m_ptrPriv->m_stNetworkObjectLoader.loadNetworkObject(stUrl.toString());
+	m_ptrPriv->m_ptrNetworkObjectLoader->loadNetworkObject(stUrl.toString());
 	start();	//starting thread processing
 }
 
@@ -343,7 +343,7 @@ void ShopPluginBase::onPageDownloadFinished(const QString & strPageContent)
 	//////////////////////////////////////////////////////////////////////////
 	if (isRefreshNeeded())
 	{
-		m_ptrPriv->m_stNetworkObjectLoader.loadNetworkObject(m_strRefreshURL);
+		m_ptrPriv->m_ptrNetworkObjectLoader->loadNetworkObject(m_strRefreshURL);
 		return;
 	}
 	else if (isNotFoundPage())
