@@ -5,10 +5,8 @@ function(AddPluginSharedLibrary PluginName SourceFilesList MocHeadersList
 	include_directories(${ComputerConfShop_PROJECT_SOURCE_DIR}/include/Plugins)
 	include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 	include(${QT_USE_FILE})
-	IF (Boost_FOUND)
-		INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-		ADD_DEFINITIONS( "-DHAS_BOOST" )
-	ENDIF(Boost_FOUND)
+	INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+	ADD_DEFINITIONS( "-DHAS_BOOST" )
 
   SET ( PLUGIN_SRC ${${SourceFilesList}} )
   SET ( PLUGIN_MOC_HEADERS ${${MocHeadersList}} )

@@ -7,6 +7,10 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::InvokeWithoutArgs;
 
+ShopPluginBaseTest::ShopPluginBaseTest()
+{
+	int a=1;
+}
 void ShopPluginBaseTest::SetUp()
 {
 	prepareSelectorsMocks();
@@ -15,10 +19,13 @@ void ShopPluginBaseTest::SetUp()
 		.WillByDefault(Return());
 	ON_CALL(stShopPluginBase, createSearchURL(_))
 		.WillByDefault(Return(QUrl("url")));
+	ON_CALL(stShopPluginBase, startElement(_,_,_,_))
+		.WillByDefault(Return(true));
+	ON_CALL(stShopPluginBase, endElement(_,_,_))
+		.WillByDefault(Return(true));
+	ON_CALL(stShopPluginBase, characters(_))
+		.WillByDefault(Return(true));
 	//reaction to calling LoadNetworkObjectMoc
-
-	
-
 }
 LoadNetworkObjectMock* ShopPluginBaseTest::getShopPluginBaseMock()
 {
@@ -62,26 +69,9 @@ TEST_F(ShopPluginBaseTest, General_test_1)
 	EXPECT_CALL(stShopPluginBase, prepareHTMLParserForNewSearch()).Times(AtLeast(1));
 	EXPECT_CALL(stShopPluginBase, createSearchURL(_)).Times(AtLeast(1));
 
-	QByteArray stContent("");
+	QByteArray stContent("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><title>AMD X4 FX-4170 s.AM3+ BOX - ProLine.pl Najlepszy Internetowy Sklep Komputerowy Wroc³aw</title>");
 	ON_CALL(*getShopPluginBaseMock(),loadNetworkObject(_))
-		//.WillByDefault(Invoke(stShopPluginBase,boost::bind(&ShopPluginBase::onPageDownloadFinished,stContent)));
-		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,boost::bind(&ShopPluginBase::onPageDownloadFinished, &stShopPluginBase, stContent)));
-		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,boost::bind(&ShopPluginBaseInheriterMock::call_onPageDownloadFinished, &stShopPluginBase, stContent)));
 		.WillByDefault(Invoke(boost::bind(&ShopPluginBaseInheriterMock::call_onPageDownloadFinished, &stShopPluginBase, stContent)));
-		//.WillByDefault(Invoke(boost::bind(&ShopPluginBaseInheriterMock::onPageDownloadFinished, boost::ref(stShopPluginBase))(stContent)));
-	
-		//.WillByDefault(Invoke(&stShopPluginBase,&ShopPluginBaseInheriterMock::printPageContent)); 
-		//-----//
 		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,&ShopPluginBaseInheriterMock::parseProductPage)); 
-		//this is function without args and return value
-
-	//EXPECT_CALL(stShopPluginBase, createSearchURL(_)).Times(AtLeast(1));
 	stShopPluginBase.getProductData("TestComponent");
-
-	//EXPECT_CALL(turtle, PenDown())              // #3
-	//	.Times(AtLeast(1));
-
-	//Painter painter(&turtle);                   // #4
-
-	//EXPECT_TRUE(painter.DrawCircle(0, 0, 10));
 } 

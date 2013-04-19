@@ -16,10 +16,10 @@ class LoadNetworkObject : public QObject //, boost::noncopyable
 	friend class LoadNetworkObjectPrivate;
 public:
 	LoadNetworkObject();
-	~LoadNetworkObject();
+	virtual ~LoadNetworkObject();
 	void operator=(const LoadNetworkObject & stCopy);
-	void loadNetworkObject(const QString &strObjectUrl);
-	void loadPostNetworkObject(QUrl stUrl, const std::map<QString, QString> &mPostData);
+	virtual void loadNetworkObject(const QString &strObjectUrl);
+	virtual void loadPostNetworkObject(QUrl stUrl, const std::map<QString, QString> &mPostData);
 signals:
 	void netObjectLoadingFinished(const QByteArray &strPageContent);
 	void netObjectLoadingFailed(const QString strFaultReason);
