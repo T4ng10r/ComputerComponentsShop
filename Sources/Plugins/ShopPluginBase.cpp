@@ -358,8 +358,12 @@ void ShopPluginBase::onPageDownloadFinished(const QString & strPageContent)
 		emit priceSearchedFinished(m_stCompData);
 		return;
 	}
+	else if (isSearchProductPage())
+	{	
+		m_ptrPriv->processSearchPageLoad();
+	}
 	//if we are here - this means this is search page - gather date and load next page
-	m_ptrPriv->processSearchPageLoad();
+	printLog(eDebugLogLevel, eDebug, "Product loading finished without processing.");
 #endif
 }
 void ShopPluginBase::onPageLoadingProgress(qint64 bytesRead, qint64 totalBytes)

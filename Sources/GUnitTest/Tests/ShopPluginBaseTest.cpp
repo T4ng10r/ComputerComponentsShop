@@ -7,10 +7,7 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::InvokeWithoutArgs;
 
-ShopPluginBaseTest::ShopPluginBaseTest()
-{
-	int a=1;
-}
+ShopPluginBaseTest::ShopPluginBaseTest(){}
 void ShopPluginBaseTest::SetUp()
 {
 	prepareSelectorsMocks();
@@ -69,7 +66,15 @@ TEST_F(ShopPluginBaseTest, General_test_1)
 	EXPECT_CALL(stShopPluginBase, prepareHTMLParserForNewSearch()).Times(AtLeast(1));
 	EXPECT_CALL(stShopPluginBase, createSearchURL(_)).Times(AtLeast(1));
 
-	QByteArray stContent("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><title>AMD X4 FX-4170 s.AM3+ BOX - ProLine.pl Najlepszy Internetowy Sklep Komputerowy Wroc³aw</title>");
+	EXPECT_CALL(stShopPluginBase, startElement(_,_,_,_)).Times(AtLeast(1));
+	EXPECT_CALL(stShopPluginBase, endElement(_,_,_)).Times(AtLeast(1));
+	EXPECT_CALL(stShopPluginBase, characters(_)).Times(AtLeast(1));
+
+
+	//EXPECT_CALL(stShopPluginBase, parseSearchProductPage(_,_)).Times(AtLeast(1));
+
+
+	QByteArray stContent("<title>AMD X4 FX-4170 s.AM3+ BOX - ProLine.pl Najlepszy Internetowy Sklep Komputerowy Wroc³aw</title>");
 	ON_CALL(*getShopPluginBaseMock(),loadNetworkObject(_))
 		.WillByDefault(Invoke(boost::bind(&ShopPluginBaseInheriterMock::call_onPageDownloadFinished, &stShopPluginBase, stContent)));
 		//.WillByDefault(InvokeWithoutArgs(&stShopPluginBase,&ShopPluginBaseInheriterMock::parseProductPage)); 
