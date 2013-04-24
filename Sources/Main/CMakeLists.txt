@@ -119,6 +119,6 @@ ENDIF (WIN32)
         ${SOURCES_GUI} ${SOURCES_GUI_VIEW} ${SOURCES_OTHER} ${SOURCES_PLUGINS}
         main.cpp ${SOURCES_RCC} ${SOURCES_DATA_MODELS})
         
-	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin Tools_Lib)
+	SET(LIBRARIES_LIST ${QT_LIBRARIES} ShopPluginInterface ProlineShopPlugin KomputronikShopPlugin ArestShopPlugin Tools_Lib ${Boost_LIBRARIES})
   	addLoggerLibrariesDependencies(ComputerConfShop LIBRARIES_LIST)
 	addLoggerLibrariesDependencies(ComputerConfShop_lib LIBRARIES_LIST)

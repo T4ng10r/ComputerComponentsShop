@@ -4,7 +4,11 @@
 #include <Data/ComputerConfModel.h>
 #include <tools/loggers.h>
 #include <list>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/lock_guard.hpp>
 
+
+boost::mutex  resultMutex;
 
 #define LOG_REFRESHING
 
@@ -274,6 +278,7 @@ void CRefreshData::onRefreshConf()
 }
 void CRefreshData::onPriceSearchedFinished(CompPriceData stData)
 {
+	boost::lock_guard<boost::mutex>  mutexGuard(resultMutex);
 	ShopInterface * iShopPluginFinishedProcessing = qobject_cast<ShopInterface *>(sender());
 	if (m_ptrPriv->m_vShopCompData.find(iShopPluginFinishedProcessing)==m_ptrPriv->m_vShopCompData.end())
 	{

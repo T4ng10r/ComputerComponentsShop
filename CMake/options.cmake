@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(Qt4 REQUIRED QtNetwork QtGui QtCore QtXml QtTest)
 
-find_package(Boost REQUIRED)
+#boost build with bjam threading=multi runtime-link=static
+SET(Boost_USE_MULTITHREADED ON)
+SET(Boost_USE_STATIC_LIBS ON)
+SET(Boost_USE_STATIC_RUNTIME ON)
+find_package(Boost REQUIRED COMPONENTS thread system date_time chrono)
 
 set(Logger "log4Qt" CACHE STRING "Logger where to store logs from program executions")
 set(LoggersNames "None;log4Qt")
