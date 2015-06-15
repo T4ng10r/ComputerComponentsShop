@@ -8,5 +8,5 @@ public:
 	{}
 
 	void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
-	virtual QSize CComponentDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+	virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };

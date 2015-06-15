@@ -11,7 +11,7 @@
 #include <QtGui/QRegExpValidator>
 #include <QtNetwork/QNetworkProxy>
 #include <Data/CDataThread.h>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 
 class IP4Validator : public QValidator {
 public:

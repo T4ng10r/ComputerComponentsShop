@@ -2,7 +2,7 @@
 #include <Data/CDataThread.h>
 #include <Data/Enumerations.h>
 #include <Data/ComputerConfModel.h>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 #include <list>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/lock_guard.hpp>

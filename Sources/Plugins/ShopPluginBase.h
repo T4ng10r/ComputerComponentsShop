@@ -16,7 +16,7 @@
 
 class ShopPluginBasePrivate;
 
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 #define TIMEOUT_INFO  QString("Timeout")
 #define ERROR_INFO  QString("Timeout")
 

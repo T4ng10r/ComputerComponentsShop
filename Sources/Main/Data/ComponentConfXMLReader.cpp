@@ -5,7 +5,7 @@
 #include <iostream>
 #include <QtCore/QtDebug>
 #include <QtCore/QDir>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 
 class ComputerConfXMLReaderPrivate : public QXmlDefaultHandler
 {

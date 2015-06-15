@@ -1,7 +1,7 @@
 #include <GUI/CustomHeaderView.h>
 #include <GUI/CustomHeaderViewEntry.h>
 #include <Data/Enumerations.h>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 
 const unsigned int ciEntrySeparator(10);
 

@@ -17,7 +17,7 @@
 #include <QtCore/QSettings>
 
 #include <list>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 
 CDataThread* CDataThread::pInstance_=0;
 const QString cstrConfFile("ComputerConfShop.xml");

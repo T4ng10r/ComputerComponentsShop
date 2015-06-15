@@ -3,8 +3,8 @@
 #include <QtCore/QString>
 #include <QtCore/QFile>
 #include <QtCore/QDir>
-#include <QtXML/QXmlInputSource>
-#include <QtXML/QXmlSimpleReader>
+#include <QXmlInputSource>
+#include <QXmlSimpleReader>
 #include <string>
 #include <tidy.h>
 #include <buffio.h>

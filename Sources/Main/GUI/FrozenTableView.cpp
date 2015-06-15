@@ -4,7 +4,7 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QMenu>
 #include <QtGui/QFont>
-#include <tools/loggers.h>
+#include <Tools/loggers.h>
 
 #include <GUI/ShopHeaderView.h>
 #include <GUI/ComponentHeaderView.h>

@@ -9,6 +9,14 @@ SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_STATIC_RUNTIME ON)
 find_package(Boost REQUIRED COMPONENTS thread system date_time chrono)
 
+if (UNIX)
+  #SET (BIT_64 false)
+  set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+  # -fPIC
+endif()
+
+
 set(Logger "log4Qt" CACHE STRING "Logger where to store logs from program executions")
 set(LoggersNames "None;log4Qt")
 set_property(CACHE Logger PROPERTY STRINGS ${LoggersNames})
